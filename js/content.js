@@ -38,7 +38,7 @@ export const CONTENT = {
       year: '2026',
       desc: 'Este portfolio: un escritorio retro en 3D con Three.js, post-procesado con dithering en un shader propio, sonidos con la Web Audio API y un gato que pide caricias.',
       tech: ['Three.js', 'GLSL', 'Web Audio API'],
-      link: '#',
+      link: 'https://github.com/d4vidstuff/portfolio',
     },
   ],
   cv: {
@@ -71,11 +71,14 @@ export const CONTENT = {
     pdf: '#',
   },
   contact: {
-    email: 'nachitogonza09@gmail.com',
+    email: 'nachog.david@gmail.com',
     links: [
-      { label: 'Web', text: 'lametalica.com.ar', url: 'https://lametalica.com.ar' },
-      { label: 'LinkedIn', text: '[LINKEDIN]', url: '#' },
-      { label: 'GitHub', text: '[GITHUB]', url: '#' },
+      {
+        label: 'LinkedIn',
+        text: 'ignacio-david-gonzalez',
+        url: 'https://www.linkedin.com/in/ignacio-david-gonzalez-752027261/',
+      },
+      { label: 'GitHub', text: 'd4vidstuff', url: 'https://github.com/d4vidstuff' },
     ],
   },
   notes: ['La Metálica: online', 'Benja no toca el teclado (mentira)', 'Próximo: primer trabajo'],

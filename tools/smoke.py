@@ -72,7 +72,7 @@ with sync_playwright() as p:
             for c in ['help', 'projects', 'open 1', 'contact', 'benja', 'date', 'xyz']:
                 pg.fill('#termIn', c); pg.press('#termIn', 'Enter')
             out = pg.inner_text('.term-out')
-            for want in ['Comandos:', 'La Metálica', 'nachitogonza09@gmail.com', 'BENJA.GAT', 'incorrecto']:
+            for want in ['Comandos:', 'La Metálica', 'nachog.david@gmail.com', 'BENJA.GAT', 'incorrecto']:
                 assert want in out, want
             pg.fill('#termIn', 'cls'); pg.press('#termIn', 'Enter')
             assert pg.inner_text('.term-out').strip() == '', 'cls'
