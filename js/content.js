@@ -11,7 +11,7 @@ export const CONTENT = {
     {
       id: '01',
       name: 'La Metálica',
-      year: '[AÑO]',
+      year: 'Oct 2026',
       desc: 'Sitio completo para un negocio local de metalmecánica. Interfaz en React 18 sin herramientas de compilación, fondos y efectos animados con WebGL (aurora, degradé con grano, galería deformable, botones con brillo), un panel de administración con Firebase para editar textos, colores y fotos, y SEO técnico con datos estructurados. Publicado en Netlify con dominio propio .com.ar.',
       tech: ['React 18', 'WebGL / OGL', 'Firebase', 'SEO', 'Netlify'],
       link: 'https://lametalica.com.ar',
@@ -19,7 +19,7 @@ export const CONTENT = {
     {
       id: '02',
       name: 'La Metálica · Panel de administración',
-      year: '[AÑO]',
+      year: 'Oct 2026',
       desc: 'Panel privado para que el negocio edite su web sin tocar código. Ingreso con Google limitado a una sola cuenta, contenido guardado en Cloud Firestore con reglas de seguridad, fotos comprimidas en el navegador antes de subirlas y vista previa en vivo antes de guardar. La web lee el contenido al cargar y lo guarda en el navegador para abrir rápido la próxima vez.',
       tech: ['Firebase Auth', 'Cloud Firestore', 'React'],
       link: 'https://lametalica.com.ar',
@@ -27,15 +27,15 @@ export const CONTENT = {
     {
       id: '03',
       name: 'La Metálica · Minijuego',
-      year: '[AÑO]',
+      year: 'Oct 2026',
       desc: 'Un minijuego dentro del sitio: escenario y tijera en SVG animado a 60 cuadros por segundo, con efectos de sonido y música generados por código con la Web Audio API, sin un solo archivo de audio.',
       tech: ['SVG', 'JavaScript', 'Web Audio API'],
       link: 'https://lametalica.com.ar',
     },
     {
       id: '04',
-      name: 'Escritorio 86',
-      year: '2026',
+      name: 'Portafolio',
+      year: 'Oct 2026',
       desc: 'Este portfolio: un escritorio retro en 3D con Three.js, post-procesado con dithering en un shader propio, sonidos con la Web Audio API y un gato que pide caricias.',
       tech: ['Three.js', 'GLSL', 'Web Audio API'],
       link: 'https://github.com/d4vidstuff/portfolio',
@@ -46,7 +46,7 @@ export const CONTENT = {
       {
         role: 'Desarrollo web completo (proyecto propio)',
         company: 'La Metálica · lametalica.com.ar',
-        period: '[AÑO]',
+        period: 'Oct 2026',
         desc: 'Diseñé, programé y publiqué el sitio de un negocio local: interfaz en React con efectos WebGL, panel de administración con Firebase, SEO técnico (JSON-LD, Open Graph, sitemap) y dominio .com.ar en Netlify con HTTPS. También preparé las fotos de obra con Python y Pillow.',
       },
     ],
