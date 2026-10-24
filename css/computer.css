@@ -337,9 +337,8 @@
   background: #020502;
 }
 .win.is-max .gal-stage {
-  max-height: 62vh;
   aspect-ratio: auto;
-  height: 62vh;
+  height: 50vh;
 }
 .gal-slide {
   position: absolute;

@@ -38,9 +38,17 @@ export const CONTENT = {
       tech: ['Three.js', 'GLSL', 'Web Audio API', 'JavaScript'],
       link: 'https://github.com/d4vidstuff/portfolio',
       photos: [
-        { src: '', alt: 'El escritorio completo' },
-        { src: '', alt: 'PORTFOLIO-DOS con las ventanas abiertas' },
-        { src: '', alt: 'Benja pidiendo caricias' },
+        {
+          src: 'img/proyectos/02/1-escritorio.jpg',
+          alt: 'El escritorio en 3D con Benja durmiendo',
+        },
+        { src: 'img/proyectos/02/2-modo-texto.jpg', alt: 'Modo texto, para leer todo de corrido' },
+        { src: 'img/proyectos/02/3-contacto.jpg', alt: 'Contacto en la ficha del módem' },
+        {
+          src: 'img/proyectos/02/4-portfolio-dos.jpg',
+          alt: 'PORTFOLIO-DOS con las ventanas abiertas',
+        },
+        { src: 'img/proyectos/02/5-cv.jpg', alt: 'El CV en la carpeta del cajón' },
       ],
     },
   ],
