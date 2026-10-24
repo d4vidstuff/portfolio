@@ -7,6 +7,10 @@ import { lambert, flat, ps1 } from '../materials.js';
 import { textures } from '../textures.js';
 import { box, cyl } from '../geometry.js';
 import { parts, TOP } from '../parts.js';
+import { CONTENT } from '../../content.js';
+
+/** Color de la carcasa de cada disquete (se repite si hay más proyectos). */
+const FLOPPY_COLORS = [0x151515, 0x1b2230, 0x2a1716];
 
 export function buildDeskItems(mats) {
   // notas adhesivas
@@ -27,11 +31,11 @@ export function buildDeskItems(mats) {
   });
   parts.notes = notes;
 
-  // disquetes
+  // disquetes: uno por proyecto de content.js
   parts.floppies = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < CONTENT.projects.length; i++) {
     const f = new THREE.Group();
-    const side = lambert([0x151515, 0x1b2230, 0x2a1716][i]);
+    const side = lambert(FLOPPY_COLORS[i % FLOPPY_COLORS.length]);
     box(
       0.09,
       0.004,

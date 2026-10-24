@@ -3,6 +3,7 @@
  * para teclado y celular.
  */
 import { $, esc } from '../core/dom.js';
+import { CONTENT } from '../content.js';
 import { app } from '../core/state.js';
 import { setTextMode } from './text-mode.js';
 import { go, goBack } from '../desk/actions.js';
@@ -24,9 +25,7 @@ const NAV = [
   ['pc', 'PC · Proyectos'],
   ['drawer', 'Cajonera · CV'],
   ['modem', 'Módem · Contacto'],
-  ['floppy0', 'Disquete 1'],
-  ['floppy1', 'Disquete 2'],
-  ['floppy2', 'Disquete 3'],
+  ...CONTENT.projects.map((p, i) => ['floppy' + i, 'Disquete · ' + p.name]),
   ['notes', 'Notas'],
   ['walkman', 'Walkman · Sonido'],
   ['benja', 'Benja'],

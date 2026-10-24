@@ -117,9 +117,9 @@ function buildTextures() {
     g.fillStyle = '#e2361f';
     g.fillText('66', 6, 9);
   });
-  textures.floppy = [0, 1, 2].map((i) =>
+  textures.floppy = CONTENT.projects.map((_, i) =>
     canvasTexture(64, 64, (g) => {
-      g.fillStyle = ['#151515', '#1b2230', '#2a1716'][i];
+      g.fillStyle = ['#151515', '#1b2230', '#2a1716'][i % 3];
       g.fillRect(0, 0, 64, 64);
       g.fillStyle = '#d9d1b8';
       g.fillRect(6, 5, 52, 24);
