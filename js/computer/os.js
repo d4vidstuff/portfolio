@@ -1,12 +1,15 @@
 /**
  * PORTFOLIO-DOS: el sistema operativo falso que arranca al hacer zoom en la PC.
- * Ventanas arrastrables con los proyectos, "sobre mí" y una terminal.
+ * Arranque, íconos del escritorio y el contenido de cada ventana (proyectos,
+ * "sobre mí", terminal). Cómo se mueven y cambian de tamaño: windows.js.
  */
 import { CONTENT } from '../content.js';
 import { $, esc, sleep, pad2, linkHTML, REDUCED_MOTION } from '../core/dom.js';
 import { sound } from '../audio/sound.js';
 import { go, goBack } from '../desk/actions.js';
 import { runCommand } from './terminal.js';
+import { createWindowManager } from './windows.js';
+import { coverHTML, galleryHTML, initGallery } from './gallery.js';
 
 const ICONS = {
   folder: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3h5l2 2h7v9H1z"/></svg>',
@@ -22,9 +25,8 @@ const ICONS = {
 const OS = {
   booted: false,
   token: 0,
-  z: 5,
-  count: 0,
-  wins: {},
+  /** Administrador de ventanas; se crea en initComputer(). */
+  wm: null,
   els() {
     return {
       os: $('#os'),
@@ -108,9 +110,7 @@ const OS = {
     await sleep(REDUCED_MOTION ? 0 : 260);
     E.os.hidden = true;
     E.os.classList.remove('off');
-    Object.values(this.wins).forEach((w) => w.remove());
-    this.wins = {};
-    this.count = 0;
+    this.wm.closeAll();
   },
   buildIcons() {
     const list = [
@@ -137,23 +137,37 @@ const OS = {
       else this.openWin(k);
     });
   },
+  /** Título, ancho y contenido de cada tipo de ventana. */
   def(key, arg) {
     if (key === 'projects')
       return {
         title: 'PROYECTOS.EXE',
-        w: 640,
-        html: `<p>${CONTENT.projects.length} archivos encontrados. Elegí uno para abrirlo.</p><div class="pgrid">${CONTENT.projects.map((p) => `<button class="pcard" data-pid="${esc(p.id)}"><span class="ph">PLACEHOLDER</span><span>${esc(p.name)}</span><span class="meta">${esc(p.year)} · ${p.tech.map(esc).join(', ')}</span></button>`).join('')}</div>`,
+        width: 660,
+        x: 248,
+        html: `<p>${CONTENT.projects.length} archivos encontrados. Elegí uno para abrirlo.</p>
+          <div class="pgrid">${CONTENT.projects
+            .map(
+              (p) => `<button class="pcard" data-pid="${esc(p.id)}">
+                ${coverHTML(p)}
+                <span>${esc(p.name)}</span>
+                <span class="meta">${esc(p.year)} · ${p.photos?.length || 0} fotos</span>
+              </button>`,
+            )
+            .join('')}</div>`,
       };
     if (key === 'about')
       return {
         title: 'SOBRE_MI.TXT',
-        w: 460,
-        html: `<h3>${esc(CONTENT.name)}</h3><p class="meta" style="color:var(--phos-dim)">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p><p>${esc(CONTENT.bio)}</p><p style="color:var(--phos-dim)">Tip: abrí TERMINAL y escribí HELP.</p>`,
+        width: 460,
+        html: `<h3>${esc(CONTENT.name)}</h3>
+          <p class="meta">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p>
+          <p>${esc(CONTENT.bio)}</p>
+          <p class="meta">Tip: abrí TERMINAL y escribí HELP.</p>`,
       };
     if (key === 'terminal')
       return {
         title: 'TERMINAL.EXE',
-        w: 540,
+        width: 540,
         html: `<div class="term"><pre class="term-out" aria-live="polite"></pre><form class="term-line"><label for="termIn">C:\\&gt;</label><input id="termIn" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Comando"></form></div>`,
       };
     if (key === 'project') {
@@ -161,75 +175,36 @@ const OS = {
       if (!p) return null;
       return {
         title: `PROYECTO_${p.id}.DSK`,
-        w: 520,
-        html: `<div class="ph ph-lg">PLACEHOLDER</div><h3>${esc(p.name)}</h3><p style="color:var(--phos-dim)">${esc(p.year)}</p><p>${esc(p.desc)}</p><ul class="chips">${p.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul><p>${linkHTML(p.link, 'VER PROYECTO →', 'os-link')}</p>`,
+        width: 640,
+        html: `${galleryHTML(p)}
+          <h3>${esc(p.name)}</h3>
+          <p class="meta">${esc(p.year)}</p>
+          <p>${esc(p.desc)}</p>
+          <ul class="chips">${p.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+          <p>${linkHTML(p.link, 'VER PROYECTO →', 'os-link')}</p>`,
       };
     }
   },
+  /** Abre (o trae al frente) una ventana y conecta lo que tenga adentro. */
   openWin(key, arg) {
     const id = key + (arg ? '-' + arg : '');
-    if (this.wins[id]) {
-      this.front(this.wins[id]);
+    if (this.wm.has(id)) {
+      this.wm.restore(id);
       return;
     }
     const d = this.def(key, arg);
     if (!d) return;
-    const area = $('#osArea'),
-      W = area.clientWidth,
-      H = area.clientHeight;
-    const w = document.createElement('div');
-    w.className = 'win';
-    w.setAttribute('role', 'dialog');
-    w.setAttribute('aria-label', d.title);
-    w.innerHTML = `<div class="win-bar"><span>${esc(d.title)}</span><button class="win-x" aria-label="Cerrar ${esc(d.title)}">[X]</button></div><div class="win-body">${d.html}</div>`;
-    const n = this.count++ % 6;
-    const ww = Math.min(d.w, W - 140);
-    w.style.width = Math.max(260, ww) + 'px';
-    w.style.left =
-      Math.max(8, Math.min(W - ww - 12, 128 + n * 34 + (key === 'projects' ? 120 : 0))) + 'px';
-    w.style.top = Math.max(8, Math.min(H - 200, 16 + n * 30)) + 'px';
-    area.appendChild(w);
-    this.wins[id] = w;
-    this.front(w);
-    w.addEventListener('pointerdown', () => this.front(w));
-    w.querySelector('.win-x').addEventListener('click', () => {
-      sound.play('shake', { vol: 0.8 });
-      w.remove();
-      delete this.wins[id];
-    });
-    this.drag(w, w.querySelector('.win-bar'));
+    const w = this.wm.open(id, d);
     w.querySelectorAll('[data-pid]').forEach((b) =>
       b.addEventListener('click', () => this.openWin('project', b.dataset.pid)),
     );
+    if (key === 'project')
+      initGallery(
+        w,
+        CONTENT.projects.find((x) => x.id === arg),
+      );
     if (key === 'terminal') this.terminal(w);
     else setTimeout(() => w.querySelector('.win-x').focus({ preventScroll: true }), 30);
-  },
-  front(w) {
-    w.style.zIndex = ++this.z;
-  },
-  drag(w, bar) {
-    bar.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('button') || matchMedia('(max-width:640px)').matches) return;
-      const area = $('#osArea').getBoundingClientRect(),
-        r = w.getBoundingClientRect(),
-        ox = e.clientX - r.left,
-        oy = e.clientY - r.top;
-      bar.setPointerCapture(e.pointerId);
-      const mv = (ev) => {
-        const x = Math.max(0, Math.min(area.width - 80, ev.clientX - area.left - ox));
-        const y = Math.max(0, Math.min(area.height - 30, ev.clientY - area.top - oy));
-        w.style.left = x + 'px';
-        w.style.top = y + 'px';
-      };
-      const up = () => {
-        bar.removeEventListener('pointermove', mv);
-        bar.removeEventListener('pointerup', up);
-        bar.removeEventListener('pointercancel', up);
-      };
-      bar.addEventListener('pointermove', mv);
-      bar.addEventListener('pointerup', up);
-      bar.addEventListener('pointercancel', up);
-    });
   },
   terminal(w) {
     const out = w.querySelector('.term-out'),
@@ -260,6 +235,7 @@ const OS = {
 };
 
 export function initComputer() {
+  OS.wm = createWindowManager($('#osArea'), $('#osTaskbar'));
   OS.buildIcons();
   setInterval(() => {
     const d = new Date();

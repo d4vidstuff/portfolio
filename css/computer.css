@@ -110,6 +110,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.os-desk > .os-area {
+  flex: 1;
+  overflow: hidden;
+}
 .os-area {
   position: relative;
   flex: 1;
@@ -178,30 +182,241 @@
   user-select: none;
   touch-action: none;
 }
-.win-bar span {
+.win-title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
-.win-x {
+
+/* Botones de la barra de título: minimizar, maximizar, cerrar */
+.win-btns {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+.win-btn {
   font-family: var(--f-ui);
-  font-size: 20px;
-  padding: 0 6px;
+  font-size: 18px;
+  line-height: 18px;
+  width: 24px;
+  height: 22px;
   color: var(--phos-bg);
+  border: 2px solid var(--phos-bg);
 }
-.win-x:hover {
+.win-btn:hover {
   background: var(--phos-bg);
   color: var(--phos);
 }
-.win-x:focus-visible {
+.win-btn:focus-visible {
   outline: 2px solid var(--phos-bg);
-  outline-offset: -2px;
+  outline-offset: 1px;
 }
 .win-body {
+  flex: 1;
   overflow: auto;
   padding: 14px 16px;
   min-height: 0;
   scrollbar-color: var(--phos-dim) transparent;
+}
+.win-body .meta {
+  color: var(--phos-dim);
+}
+
+/* Bordes para cambiar el tamaño: derecho, inferior y esquina */
+.win-rs {
+  position: absolute;
+  z-index: 3;
+  touch-action: none;
+}
+.win-rs-e {
+  top: 24px;
+  right: -5px;
+  bottom: 10px;
+  width: 10px;
+  cursor: ew-resize;
+}
+.win-rs-s {
+  left: 0;
+  right: 10px;
+  bottom: -5px;
+  height: 10px;
+  cursor: ns-resize;
+}
+.win-rs-se {
+  right: -5px;
+  bottom: -5px;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  background: linear-gradient(
+    135deg,
+    transparent 50%,
+    var(--phos) 50% 60%,
+    transparent 60% 70%,
+    var(--phos) 70% 80%,
+    transparent 80%
+  );
+}
+
+/* Maximizada: ocupa todo el escritorio */
+.win.is-max {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none;
+  max-height: none;
+  box-shadow: none;
+}
+.win.is-max .win-rs {
+  display: none;
+}
+.win.is-max .win-bar {
+  cursor: default;
+}
+.win.pop {
+  animation: winpop 0.16s steps(4);
+}
+@keyframes winpop {
+  from {
+    transform: scale(0.6, 0.1) translateY(400px);
+    opacity: 0.4;
+  }
+}
+
+/* Barra de tareas con una pestaña por ventana abierta */
+.os-taskbar {
+  display: flex;
+  gap: 6px;
+  padding: 4px 8px;
+  min-height: 34px;
+  border-top: 2px solid var(--phos);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.os-tab {
+  flex: none;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 10px;
+  font-size: 17px;
+  color: var(--phos);
+  border: 1px solid var(--phos-dim);
+  text-shadow: inherit;
+}
+.os-tab:hover {
+  border-color: var(--phos);
+}
+.os-tab.on {
+  background: var(--phos);
+  color: var(--phos-bg);
+  text-shadow: none;
+}
+.os-tab.min {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+/* Galería de fotos de un proyecto */
+.gal {
+  margin: 0 0 6px;
+  outline: none;
+}
+.gal:focus-visible .gal-stage {
+  outline: 1px dashed var(--phos);
+  outline-offset: 3px;
+}
+.gal-stage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  max-width: 100%;
+  border: 1px solid var(--phos-dim);
+  background: #020502;
+}
+.win.is-max .gal-stage {
+  max-height: 62vh;
+  aspect-ratio: auto;
+  height: 62vh;
+}
+.gal-slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+}
+.gal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  aspect-ratio: auto;
+  border: 0;
+}
+.gal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 44px;
+  font-size: 20px;
+  color: var(--phos);
+  background: rgba(5, 12, 6, 0.8);
+  border: 1px solid var(--phos-dim);
+}
+.gal-nav:hover {
+  background: var(--phos);
+  color: var(--phos-bg);
+}
+.gal-prev {
+  left: 6px;
+}
+.gal-next {
+  right: 6px;
+}
+.gal-count {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  padding: 0 6px;
+  font-size: 17px;
+  background: rgba(5, 12, 6, 0.8);
+}
+.gal-cap {
+  margin: 6px 0 0;
+  color: var(--phos-dim);
+  font-size: 18px;
+}
+.gal-thumbs {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.gal-thumb {
+  flex: none;
+  width: 72px;
+  border: 1px solid var(--phos-dim);
+  opacity: 0.65;
+}
+.gal-thumb.on {
+  border-color: var(--phos);
+  opacity: 1;
+}
+.gal-thumb-img {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  font-size: 12px;
+  border: 0;
+}
+.pcard-img {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 .win-body p {
   margin: 0 0 10px;
@@ -250,6 +465,17 @@
   font-size: 17px;
   letter-spacing: 0.15em;
   text-shadow: none;
+}
+/* Placeholders de fotos dentro de la galería: ocupan el marco, sin doble borde */
+.gal-slide > .ph {
+  aspect-ratio: auto;
+  height: 100%;
+  border: 0;
+}
+.gal-thumb-img.ph {
+  aspect-ratio: 16 / 10;
+  border: 0;
+  letter-spacing: 0.05em;
 }
 .ph-lg {
   max-width: 440px;
@@ -343,8 +569,12 @@
     right: 6px;
     bottom: 96px;
     width: auto !important;
+    height: auto !important;
     max-width: none;
     max-height: none;
+  }
+  .win-rs {
+    display: none;
   }
   .win-bar {
     cursor: default;

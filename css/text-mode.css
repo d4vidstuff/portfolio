@@ -112,3 +112,16 @@ body.text-on #textmode {
   margin: 0;
   overflow-wrap: anywhere;
 }
+
+.tm-photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  margin: 8px 0;
+}
+.tm-photos img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid #2a2c26;
+}

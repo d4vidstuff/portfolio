@@ -26,6 +26,7 @@ css/                  Un archivo por parte de la interfaz.
   text-mode.css       Modo texto.
   loader.css          Pantalla de carga.
 audio/                Maullido y sacudida.
+img/proyectos/<id>/   Fotos de cada proyecto.
 js/
   main.js             Punto de entrada. Si no hay WebGL, muestra el modo texto.
   content.js          TODO el texto: nombre, bio, proyectos, CV, contacto, notas.
@@ -46,7 +47,9 @@ js/
     camera.js         Movimientos de cámara y adaptación a la pantalla.
     drawer-alert.js   El cajón que se agita.
   cat/                Benja despierto: poses, comportamiento, caricias y globo.
-  computer/           PORTFOLIO-DOS: ventanas (os.js) y comandos (terminal.js).
+  computer/           PORTFOLIO-DOS: contenido (os.js), ventanas que se mueven,
+                      agrandan y minimizan (windows.js), galería de fotos
+                      (gallery.js) y comandos (terminal.js).
 tools/smoke.py        Prueba automática en Chromium (ver abajo).
 ```
 
@@ -55,6 +58,7 @@ tools/smoke.py        Prueba automática en Chromium (ver abajo).
 | Quiero... | Archivo |
 | --- | --- |
 | Cambiar textos, proyectos o el CV | `js/content.js` |
+| Agregar fotos a un proyecto | Copiarlas a `img/proyectos/<id>/` y poner la ruta en `photos` de `js/content.js` |
 | Agregar un comando a la terminal | `js/computer/terminal.js` |
 | Cambiar qué hace un objeto al tocarlo | `js/desk/actions.js` |
 | Mover o agregar un objeto 3D | `js/scene/objects/` y registrarlo en `js/desk/start.js` |

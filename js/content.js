@@ -1,6 +1,10 @@
 /**
  * Todo el texto del portfolio: nombre, bio, proyectos, CV, contacto y notas.
  * Es el único archivo que hay que tocar para cambiar el contenido.
+ *
+ * Fotos de proyectos: guardalas en img/proyectos/<id>/ y poné la ruta en `src`,
+ * por ejemplo { src: 'img/proyectos/01/inicio.jpg', alt: 'Inicio con la aurora' }.
+ * Mientras `src` esté vacío se muestra un recuadro "FOTO n".
  */
 export const CONTENT = {
   name: 'Ignacio David Gonzalez',
@@ -15,6 +19,12 @@ export const CONTENT = {
       desc: 'Sitio completo para un negocio local de metalmecánica. Interfaz en React 18 sin herramientas de compilación, fondos y efectos animados con WebGL (aurora, degradé con grano, galería deformable, botones con brillo), un panel de administración con Firebase para editar textos, colores y fotos, y SEO técnico con datos estructurados. Publicado en Netlify con dominio propio .com.ar.',
       tech: ['React 18', 'WebGL / OGL', 'Firebase', 'SEO', 'Netlify'],
       link: 'https://lametalica.com.ar',
+      photos: [
+        { src: '', alt: 'Inicio con la aurora animada' },
+        { src: '', alt: 'Galería de trabajos arrastrable' },
+        { src: '', alt: 'Sección Metalmecánica con degradé y grano' },
+        { src: '', alt: 'Versión para celular' },
+      ],
     },
     {
       id: '02',
@@ -23,6 +33,12 @@ export const CONTENT = {
       desc: 'Panel privado para que el negocio edite su web sin tocar código. Ingreso con Google limitado a una sola cuenta, contenido guardado en Cloud Firestore con reglas de seguridad, fotos comprimidas en el navegador antes de subirlas y vista previa en vivo antes de guardar. La web lee el contenido al cargar y lo guarda en el navegador para abrir rápido la próxima vez.',
       tech: ['Firebase Auth', 'Cloud Firestore', 'React'],
       link: 'https://lametalica.com.ar',
+      photos: [
+        { src: '', alt: 'Ingreso con Google' },
+        { src: '', alt: 'Editor de textos y colores' },
+        { src: '', alt: 'Subida de fotos comprimidas' },
+        { src: '', alt: 'Vista previa en vivo antes de guardar' },
+      ],
     },
     {
       id: '03',
@@ -31,6 +47,10 @@ export const CONTENT = {
       desc: 'Un minijuego dentro del sitio: escenario y tijera en SVG animado a 60 cuadros por segundo, con efectos de sonido y música generados por código con la Web Audio API, sin un solo archivo de audio.',
       tech: ['SVG', 'JavaScript', 'Web Audio API'],
       link: 'https://lametalica.com.ar',
+      photos: [
+        { src: '', alt: 'Pantalla de inicio del minijuego' },
+        { src: '', alt: 'Partida en curso' },
+      ],
     },
     {
       id: '04',
@@ -39,6 +59,11 @@ export const CONTENT = {
       desc: 'Este portfolio: un escritorio retro en 3D con Three.js, post-procesado con dithering en un shader propio, sonidos con la Web Audio API y un gato que pide caricias.',
       tech: ['Three.js', 'GLSL', 'Web Audio API'],
       link: 'https://github.com/d4vidstuff/portfolio',
+      photos: [
+        { src: '', alt: 'El escritorio completo' },
+        { src: '', alt: 'PORTFOLIO-DOS con las ventanas abiertas' },
+        { src: '', alt: 'Benja pidiendo caricias' },
+      ],
     },
   ],
   cv: {

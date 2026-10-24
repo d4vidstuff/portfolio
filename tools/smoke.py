@@ -7,6 +7,7 @@ from playwright.sync_api import sync_playwright
 
 root, page_path = sys.argv[1], sys.argv[2]
 no_three = '--no-three' in sys.argv
+shot_dir = next((a.split('=',1)[1] for a in sys.argv if a.startswith('--shots=')), '/tmp')
 
 MOCK = r"""
 (function(){
@@ -66,6 +67,27 @@ with sync_playwright() as p:
         back = lambda: (pg.click('#btnBack'), pg.wait_for_timeout(2600))
         step('PC arranca el sistema', lambda: (go('pc'), pg.wait_for_selector('#osDesk', state='visible', timeout=9000)))
         step('ventanas iniciales', lambda: pg.wait_for_selector('.win', timeout=8000))
+        def win_controls():
+            W = '[data-win="about"]'
+            pg.click(W + ' [data-act="max"]'); assert 'is-max' in pg.get_attribute(W, 'class'), 'max'
+            pg.click(W + ' [data-act="max"]'); assert 'is-max' not in pg.get_attribute(W, 'class'), 'restaurar'
+            pg.click(W + ' [data-act="min"]'); assert pg.evaluate(f"document.querySelector('{W}').hidden"), 'min'
+            pg.click('.os-tab.min'); assert not pg.evaluate(f"document.querySelector('{W}').hidden"), 'tab'
+            P = '[data-win="projects"]'
+            pg.click(P + ' .win-title')
+            b0 = pg.locator(P).bounding_box()
+            h = pg.locator(P + ' .win-rs-se').bounding_box()
+            pg.mouse.move(h['x'] + 5, h['y'] + 5); pg.mouse.down(); pg.mouse.move(h['x'] - 120, h['y'] - 60, steps=5); pg.mouse.up()
+            b1 = pg.locator(P).bounding_box()
+            assert b1['width'] < b0['width'] - 100, ('resize', b0, b1)
+            t = pg.locator(P + ' .win-title').bounding_box()
+            pg.mouse.move(t['x'] + 20, t['y'] + 8); pg.mouse.down(); pg.mouse.move(t['x'] - 40, t['y'] + 48, steps=5); pg.mouse.up()
+            b2 = pg.locator(P).bounding_box()
+            assert abs(b2['y'] - b1['y'] - 40) < 4, ('drag', b1, b2)
+            pg.dblclick(P + ' .win-title'); assert 'is-max' in pg.get_attribute(P, 'class'), 'dblclick'
+            pg.screenshot(path=shot_dir + '/os-max.png')
+            pg.dblclick(P + ' .win-title')
+        step('ventanas: maximizar, minimizar, tamaño, mover', win_controls)
         def terminal():
             pg.click('[data-k="terminal"]')
             pg.wait_for_selector('#termIn', timeout=2000)
@@ -78,6 +100,16 @@ with sync_playwright() as p:
             assert pg.inner_text('.term-out').strip() == '', 'cls'
         step('terminal', terminal)
         step('abrir proyecto 01', lambda: pg.wait_for_selector('[aria-label="PROYECTO_01.DSK"]', timeout=2000))
+        def gallery():
+            G = '[data-win="project-01"] '
+            cnt = lambda: pg.inner_text(G + '.gal-count')
+            assert cnt() == '1 / 4', cnt()
+            pg.click(G + '.gal-next'); assert cnt() == '2 / 4', cnt()
+            pg.click(G + '.gal-thumb[data-i="3"]'); assert cnt() == '4 / 4', cnt()
+            pg.focus(G + '.gal'); pg.keyboard.press('ArrowRight'); assert cnt() == '1 / 4', cnt()
+            assert 'Inicio con la aurora' in pg.inner_text(G + '.gal-cap')
+            pg.screenshot(path=shot_dir + '/os-gallery.png')
+        step('galería de fotos', gallery)
         step('cerrar ventana', lambda: (pg.click('[aria-label="PROYECTO_01.DSK"] .win-x'), pg.wait_for_timeout(200)))
         step('volver de la PC', lambda: (back(), pg.wait_for_selector('#os', state='hidden', timeout=5000)))
         def alert():
