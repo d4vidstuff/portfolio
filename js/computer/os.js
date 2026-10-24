@@ -92,7 +92,8 @@ const OS = {
     this.booted = true;
     E.boot.hidden = true;
     E.desk.hidden = false;
-    $('#osTitle').textContent = 'PORTFOLIO-DOS v1.0 · ' + CONTENT.name;
+    $('#osTitle').innerHTML =
+      `PORTFOLIO-DOS v1.0<span class="hud-long"> · ${esc(CONTENT.name)}</span>`;
     if (pid) this.openWin('project', pid);
     else {
       this.openWin('about');

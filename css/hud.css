@@ -194,3 +194,28 @@ body.focused #objnav,
 body.focused #hint {
   display: none;
 }
+
+/* Celular: la barra superior entra en dos renglones cortos */
+@media (max-width: 640px) {
+  .hud {
+    gap: 6px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
+  }
+  .hud-long {
+    display: none;
+  }
+  .tape {
+    font-size: 17px;
+    letter-spacing: 0.1em;
+    padding: 2px 9px 3px;
+  }
+  .hud-actions {
+    flex: 1 1 100%;
+    gap: 6px;
+  }
+  .btn {
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    padding: 4px 8px;
+  }
+}

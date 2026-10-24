@@ -316,3 +316,9 @@
   justify-content: center;
   margin-top: 34px;
 }
+
+@media (max-width: 640px) {
+  .ov-scroll {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
+  }
+}

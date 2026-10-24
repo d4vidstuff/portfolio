@@ -536,10 +536,24 @@
   padding: 0;
 }
 @media (max-width: 640px) {
+  #os {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 84px);
+    padding-left: max(8px, env(safe-area-inset-left, 0px));
+    padding-right: max(8px, env(safe-area-inset-right, 0px));
+  }
+  .bezel {
+    padding: 8px;
+    border-radius: 14px;
+  }
+  .os-bar {
+    padding: 4px 12px;
+    font-size: 16px;
+  }
   .crt {
     font-size: 19px;
     border-radius: 16px/22px;
   }
+  /* íconos en una sola fila que se desliza de costado */
   .os-icons {
     position: absolute;
     left: 0;
@@ -547,27 +561,39 @@
     top: auto;
     bottom: 0;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
     gap: 0;
-    padding: 4px;
+    padding: 2px 4px;
     background: var(--phos-bg);
     border-top: 1px solid var(--phos-dim);
   }
   .os-icon {
-    width: 70px;
-    font-size: 14px;
-    padding: 4px 0;
+    flex: none;
+    width: 64px;
+    font-size: 13px;
+    padding: 3px 0;
+  }
+  .os-icon span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .os-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+  }
+  .os-tab {
+    font-size: 15px;
+    max-width: 140px;
   }
   .win {
     left: 6px !important;
     top: 6px !important;
     right: 6px;
-    bottom: 96px;
+    bottom: 60px;
     width: auto !important;
     height: auto !important;
     max-width: none;

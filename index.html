@@ -28,11 +28,17 @@
     <div id="tip" aria-hidden="true"></div>
 
     <header class="hud" id="hud" hidden>
-      <div class="tape" id="tape">Ignacio David Gonzalez · Desarrollador web frontend</div>
+      <div class="tape" id="tape">
+        Ignacio David Gonzalez<span class="hud-long"> · Desarrollador web frontend</span>
+      </div>
       <div class="hud-actions">
-        <button class="btn btn-back" id="btnBack" hidden>← Volver al escritorio</button>
+        <button class="btn btn-back" id="btnBack" hidden>
+          ← Volver<span class="hud-long"> al escritorio</span>
+        </button>
         <button class="btn" id="btnSound" aria-pressed="false">Sonido: off</button>
-        <button class="btn" id="btnText">Modo texto</button>
+        <button class="btn" id="btnText" aria-label="Modo texto">
+          <span class="hud-long">Modo </span>texto
+        </button>
       </div>
     </header>
 
@@ -100,7 +106,16 @@
     <div id="loader">
       <div class="ld">
         <p class="blink" id="ldMsg">INSERTE DISQUETE EN UNIDAD A:</p>
-        <p id="ldbar">[░░░░░░░░░░░░░░░░░░░░]</p>
+        <div
+          id="ldbar"
+          role="progressbar"
+          aria-label="Cargando"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <span></span>
+        </div>
         <button id="enter" hidden>[ ENTRAR ]</button>
         <p class="ld-small">o <button id="enterText">ver el portfolio en modo texto</button></p>
       </div>

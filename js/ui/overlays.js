@@ -26,7 +26,8 @@ function renderOverlays() {
   $('#notesWrap').innerHTML = CONTENT.notes
     .map((n) => `<div class="note">${esc(n)}</div>`)
     .join('');
-  $('#tape').textContent = `${CONTENT.name} · ${CONTENT.role}`;
+  $('#tape').innerHTML =
+    `${esc(CONTENT.name)}<span class="hud-long"> · ${esc(CONTENT.role)}</span>`;
   $('#copyMail').addEventListener('click', () => {
     const txt = CONTENT.contact.email;
     const done = () => toast('Email copiado.');

@@ -27,7 +27,8 @@ async function start() {
     N = 20;
   let k = 0;
   const step = () => {
-    bar.textContent = '[' + '█'.repeat(k) + '░'.repeat(N - k) + ']';
+    bar.style.setProperty('--p', k / N);
+    bar.setAttribute('aria-valuenow', Math.round((k / N) * 100));
   };
   const fontsReady = Promise.race([
     Promise.all(
