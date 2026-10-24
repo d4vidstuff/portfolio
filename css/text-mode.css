@@ -1,0 +1,114 @@
+/* ---------- Modo texto ---------- */
+#textmode {
+  background: var(--void);
+  color: var(--bone);
+}
+body.text-on {
+  overflow: auto;
+}
+body.text-on #gl,
+body.text-on .hud,
+body.text-on #hint,
+body.text-on #objnav,
+body.text-on #tip {
+  display: none;
+}
+body.text-on #textmode {
+  position: relative;
+  z-index: 35;
+  min-height: 100%;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 28px) 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.tm {
+  max-width: 72ch;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.tm-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.tm-top .tape {
+  font-size: 18px;
+}
+.tm h1 {
+  font-family: var(--f-ui);
+  font-weight: 400;
+  font-size: clamp(44px, 9vw, 72px);
+  line-height: 0.95;
+  margin: 0;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+.tm .role {
+  margin: 8px 0 0;
+  color: var(--dim);
+}
+.tm h2 {
+  font-family: var(--f-ui);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 44px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #2a2c26;
+  color: var(--bone);
+}
+.tm h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+.tm h3 span,
+.tm .when {
+  font-weight: 400;
+  color: var(--dim);
+}
+.tm ul {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+.tm li {
+  margin: 0 0 18px;
+}
+.tm p {
+  margin: 4px 0;
+}
+.tm a {
+  color: var(--bone);
+  text-decoration-color: var(--blood-hi);
+  text-underline-offset: 3px;
+}
+.tm a:hover {
+  color: var(--tape-ink);
+}
+.tm .tech {
+  color: var(--dim);
+  font-size: 14px;
+}
+.tm dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 18px;
+  margin: 0;
+}
+.tm dt {
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 13px;
+  padding-top: 2px;
+}
+.tm dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

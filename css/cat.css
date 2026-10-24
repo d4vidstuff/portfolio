@@ -1,0 +1,75 @@
+#catBubble {
+  position: fixed;
+  z-index: 14;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  background: var(--bone);
+  color: var(--paper-ink);
+  font-family: var(--f-ui);
+  font-size: 21px;
+  line-height: 1.1;
+  padding: 6px 12px 7px;
+  border: 2px solid var(--paper-ink);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+#catBubble[hidden] {
+  display: none;
+}
+#catBubble::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 12px;
+  height: 12px;
+  background: var(--bone);
+  border-right: 2px solid var(--paper-ink);
+  border-bottom: 2px solid var(--paper-ink);
+  transform: translateX(-50%) rotate(45deg);
+}
+#catBubble b {
+  font-weight: 400;
+}
+#catBubble .meter {
+  color: var(--blood);
+  letter-spacing: 0.12em;
+}
+#catBubble small {
+  font-size: 16px;
+  opacity: 0.7;
+}
+.heart {
+  position: fixed;
+  z-index: 16;
+  pointer-events: none;
+  color: var(--blood-hi);
+  font-family: var(--f-ui);
+  font-size: 28px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  animation: heartup 1.6s ease-out forwards;
+}
+@keyframes heartup {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -90px) scale(1.2);
+  }
+}
+body.text-on #catBubble,
+body.focused #catBubble {
+  display: none;
+}

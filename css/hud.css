@@ -1,0 +1,196 @@
+/* ---------- HUD ---------- */
+.hud {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  pointer-events: none;
+}
+.hud > * {
+  pointer-events: auto;
+}
+.tape {
+  font-family: var(--f-ui);
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--blood);
+  color: var(--tape-ink);
+  padding: 3px 12px 4px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
+  transform: rotate(-1deg);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  max-width: 100%;
+}
+.hud-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.btn {
+  font-family: var(--f-ui);
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--bone);
+  background: rgba(6, 7, 6, 0.78);
+  border: 1px solid var(--dim);
+  padding: 5px 12px;
+}
+.btn:hover {
+  border-color: var(--blood-hi);
+  color: var(--tape-ink);
+}
+.btn[aria-pressed='true'] {
+  border-color: var(--phos);
+  color: var(--phos);
+}
+.btn-back {
+  background: var(--blood);
+  border-color: var(--blood);
+  color: var(--tape-ink);
+}
+.btn-back:hover {
+  background: var(--blood-hi);
+  border-color: var(--blood-hi);
+}
+
+#tip {
+  position: fixed;
+  z-index: 15;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  font-family: var(--f-ui);
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--blood);
+  color: var(--tape-ink);
+  padding: 1px 9px 2px;
+  transform: translate(16px, 16px) rotate(-1deg);
+  opacity: 0;
+  transition: opacity 0.12s;
+  white-space: nowrap;
+}
+#tip.on {
+  opacity: 1;
+}
+#hint {
+  position: fixed;
+  z-index: 12;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  margin: 0;
+  font-family: var(--f-ui);
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  transition: opacity 0.6s;
+  pointer-events: none;
+}
+#hint b {
+  color: var(--bone);
+  font-weight: 400;
+}
+#toast {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  font-family: var(--f-ui);
+  font-size: 22px;
+  color: var(--bone);
+  background: rgba(6, 7, 6, 0.9);
+  border-left: 4px solid var(--blood-hi);
+  padding: 6px 14px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+#toast.on {
+  opacity: 1;
+}
+
+#toast.alert {
+  color: var(--tape-ink);
+  background: var(--blood);
+  border-left-color: var(--tape-ink);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: jolt 0.5s steps(6) 2;
+}
+@keyframes jolt {
+  0%,
+  100% {
+    transform: translateX(-50%);
+  }
+  20% {
+    transform: translateX(calc(-50% - 6px)) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(calc(-50% + 5px)) rotate(1deg);
+  }
+  60% {
+    transform: translateX(calc(-50% - 4px));
+  }
+  80% {
+    transform: translateX(calc(-50% + 3px));
+  }
+}
+
+#objnav {
+  position: fixed;
+  z-index: 12;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+#objnav button {
+  font-family: var(--f-ui);
+  font-size: 19px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  min-height: 42px;
+  padding: 4px 12px;
+  background: rgba(6, 7, 6, 0.82);
+  border: 1px solid var(--dim);
+  color: var(--bone);
+}
+#objnav button:hover {
+  border-color: var(--blood-hi);
+}
+body:not(.mobile) #objnav:not(:focus-within) {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+}
+body.mobile #hint {
+  display: none;
+}
+body.focused #objnav,
+body.focused #hint {
+  display: none;
+}

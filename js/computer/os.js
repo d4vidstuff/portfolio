@@ -1,0 +1,270 @@
+/**
+ * PORTFOLIO-DOS: el sistema operativo falso que arranca al hacer zoom en la PC.
+ * Ventanas arrastrables con los proyectos, "sobre mí" y una terminal.
+ */
+import { CONTENT } from '../content.js';
+import { $, esc, sleep, pad2, linkHTML, REDUCED_MOTION } from '../core/dom.js';
+import { sound } from '../audio/sound.js';
+import { go, goBack } from '../desk/actions.js';
+import { runCommand } from './terminal.js';
+
+const ICONS = {
+  folder: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3h5l2 2h7v9H1z"/></svg>',
+  doc: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1h7l3 3v11H3z"/><path d="M5 6h6v1H5zM5 8h6v1H5zM5 10h6v1H5zM5 12h4v1H5z" fill="#050c06"/></svg>',
+  term: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 2h14v12H1z"/><path d="M3 5h1v1H3zM4 6h1v1H4zM5 7h1v1H5zM4 8h1v1H4zM3 9h1v1H3zM7 10h4v1H7z" fill="#050c06"/></svg>',
+  drawer:
+    '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3h14v11H1z"/><path d="M2 8h12v1H2zM6 5h4v1H6zM6 10h4v1H6z" fill="#050c06"/></svg>',
+  phone:
+    '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 4h14v3h-3V5H4v2H1zM4 8h8v6H4z"/><path d="M7 10h2v2H7z" fill="#050c06"/></svg>',
+  power:
+    '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M7 1h2v7H7zM3 4h2v2H4v4h1v1h1v1h4v-1h1v-1h1V6h-1V4h2v1h1v6h-1v1h-1v1h-1v1H5v-1H4v-1H3v-1H2V5h1z"/></svg>',
+};
+const OS = {
+  booted: false,
+  token: 0,
+  z: 5,
+  count: 0,
+  wins: {},
+  els() {
+    return {
+      os: $('#os'),
+      boot: $('#boot'),
+      desk: $('#osDesk'),
+      area: $('#osArea'),
+      icons: $('#osIcons'),
+    };
+  },
+  async open(pid) {
+    const E = this.els();
+    const tok = ++this.token;
+    E.os.hidden = false;
+    E.os.classList.remove('off');
+    requestAnimationFrame(() => E.os.classList.add('in'));
+    sound.sfx('crton');
+    E.desk.hidden = true;
+    E.boot.hidden = false;
+    E.boot.textContent = '';
+    const out = (s) => {
+      E.boot.textContent += s;
+    };
+    if (!this.booted) {
+      const lines = ['MIKROTEK BIOS v1.08   (C) 1986\n', 'CPU 8088 a 4.77 MHz\n', '\n'];
+      for (const l of lines) {
+        if (tok !== this.token) return;
+        out(l);
+        await sleep(140);
+      }
+      for (let k = 0; k <= 640; k += 64) {
+        if (tok !== this.token) return;
+        E.boot.textContent = E.boot.textContent.replace(/Memoria: \d+K.*\n?$/, '');
+        out(`Memoria: ${String(k).padStart(6, '0')}K${k === 640 ? ' OK' : ''}\n`);
+        await sleep(55);
+      }
+      for (const l of [
+        'Unidad A: ......... LISTA\n',
+        'Unidad C: ......... LISTA\n',
+        '\n',
+        'C:\\> PORTFOLIO.EXE\n',
+        'Cargando ',
+      ]) {
+        if (tok !== this.token) return;
+        out(l);
+        await sleep(180);
+      }
+      sound.sfx('beep');
+      for (let i = 0; i < 12; i++) {
+        if (tok !== this.token) return;
+        out('█');
+        await sleep(45);
+      }
+      await sleep(260);
+    } else {
+      out('C:\\> PORTFOLIO.EXE\nCargando ');
+      for (let i = 0; i < 6; i++) {
+        if (tok !== this.token) return;
+        out('█');
+        await sleep(40);
+      }
+    }
+    if (tok !== this.token) return;
+    this.booted = true;
+    E.boot.hidden = true;
+    E.desk.hidden = false;
+    $('#osTitle').textContent = 'PORTFOLIO-DOS v1.0 · ' + CONTENT.name;
+    if (pid) this.openWin('project', pid);
+    else {
+      this.openWin('about');
+      this.openWin('projects');
+    }
+  },
+  async close() {
+    const E = this.els();
+    this.token++;
+    if (E.os.hidden) return;
+    sound.sfx('crtoff');
+    E.os.classList.add('off');
+    await sleep(430);
+    E.os.classList.remove('in');
+    await sleep(REDUCED_MOTION ? 0 : 260);
+    E.os.hidden = true;
+    E.os.classList.remove('off');
+    Object.values(this.wins).forEach((w) => w.remove());
+    this.wins = {};
+    this.count = 0;
+  },
+  buildIcons() {
+    const list = [
+      ['projects', 'PROYECTOS', 'folder'],
+      ['about', 'SOBRE_MI.TXT', 'doc'],
+      ['terminal', 'TERMINAL', 'term'],
+      ['cv', 'CV.LNK', 'drawer'],
+      ['contact', 'CONTACTO', 'phone'],
+      ['off', 'APAGAR', 'power'],
+    ];
+    $('#osIcons').innerHTML = list
+      .map(
+        ([k, l, ic]) =>
+          `<button class="os-icon" data-k="${k}">${ICONS[ic]}<span>${l}</span></button>`,
+      )
+      .join('');
+    $('#osIcons').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-k]');
+      if (!b) return;
+      const k = b.dataset.k;
+      if (k === 'off') goBack();
+      else if (k === 'cv') go('drawer');
+      else if (k === 'contact') go('modem');
+      else this.openWin(k);
+    });
+  },
+  def(key, arg) {
+    if (key === 'projects')
+      return {
+        title: 'PROYECTOS.EXE',
+        w: 640,
+        html: `<p>${CONTENT.projects.length} archivos encontrados. Elegí uno para abrirlo.</p><div class="pgrid">${CONTENT.projects.map((p) => `<button class="pcard" data-pid="${esc(p.id)}"><span class="ph">PLACEHOLDER</span><span>${esc(p.name)}</span><span class="meta">${esc(p.year)} · ${p.tech.map(esc).join(', ')}</span></button>`).join('')}</div>`,
+      };
+    if (key === 'about')
+      return {
+        title: 'SOBRE_MI.TXT',
+        w: 460,
+        html: `<h3>${esc(CONTENT.name)}</h3><p class="meta" style="color:var(--phos-dim)">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p><p>${esc(CONTENT.bio)}</p><p style="color:var(--phos-dim)">Tip: abrí TERMINAL y escribí HELP.</p>`,
+      };
+    if (key === 'terminal')
+      return {
+        title: 'TERMINAL.EXE',
+        w: 540,
+        html: `<div class="term"><pre class="term-out" aria-live="polite"></pre><form class="term-line"><label for="termIn">C:\\&gt;</label><input id="termIn" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Comando"></form></div>`,
+      };
+    if (key === 'project') {
+      const p = CONTENT.projects.find((x) => x.id === arg);
+      if (!p) return null;
+      return {
+        title: `PROYECTO_${p.id}.DSK`,
+        w: 520,
+        html: `<div class="ph ph-lg">PLACEHOLDER</div><h3>${esc(p.name)}</h3><p style="color:var(--phos-dim)">${esc(p.year)}</p><p>${esc(p.desc)}</p><ul class="chips">${p.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul><p>${linkHTML(p.link, 'VER PROYECTO →', 'os-link')}</p>`,
+      };
+    }
+  },
+  openWin(key, arg) {
+    const id = key + (arg ? '-' + arg : '');
+    if (this.wins[id]) {
+      this.front(this.wins[id]);
+      return;
+    }
+    const d = this.def(key, arg);
+    if (!d) return;
+    const area = $('#osArea'),
+      W = area.clientWidth,
+      H = area.clientHeight;
+    const w = document.createElement('div');
+    w.className = 'win';
+    w.setAttribute('role', 'dialog');
+    w.setAttribute('aria-label', d.title);
+    w.innerHTML = `<div class="win-bar"><span>${esc(d.title)}</span><button class="win-x" aria-label="Cerrar ${esc(d.title)}">[X]</button></div><div class="win-body">${d.html}</div>`;
+    const n = this.count++ % 6;
+    const ww = Math.min(d.w, W - 140);
+    w.style.width = Math.max(260, ww) + 'px';
+    w.style.left =
+      Math.max(8, Math.min(W - ww - 12, 128 + n * 34 + (key === 'projects' ? 120 : 0))) + 'px';
+    w.style.top = Math.max(8, Math.min(H - 200, 16 + n * 30)) + 'px';
+    area.appendChild(w);
+    this.wins[id] = w;
+    this.front(w);
+    w.addEventListener('pointerdown', () => this.front(w));
+    w.querySelector('.win-x').addEventListener('click', () => {
+      sound.play('shake', { vol: 0.8 });
+      w.remove();
+      delete this.wins[id];
+    });
+    this.drag(w, w.querySelector('.win-bar'));
+    w.querySelectorAll('[data-pid]').forEach((b) =>
+      b.addEventListener('click', () => this.openWin('project', b.dataset.pid)),
+    );
+    if (key === 'terminal') this.terminal(w);
+    else setTimeout(() => w.querySelector('.win-x').focus({ preventScroll: true }), 30);
+  },
+  front(w) {
+    w.style.zIndex = ++this.z;
+  },
+  drag(w, bar) {
+    bar.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('button') || matchMedia('(max-width:640px)').matches) return;
+      const area = $('#osArea').getBoundingClientRect(),
+        r = w.getBoundingClientRect(),
+        ox = e.clientX - r.left,
+        oy = e.clientY - r.top;
+      bar.setPointerCapture(e.pointerId);
+      const mv = (ev) => {
+        const x = Math.max(0, Math.min(area.width - 80, ev.clientX - area.left - ox));
+        const y = Math.max(0, Math.min(area.height - 30, ev.clientY - area.top - oy));
+        w.style.left = x + 'px';
+        w.style.top = y + 'px';
+      };
+      const up = () => {
+        bar.removeEventListener('pointermove', mv);
+        bar.removeEventListener('pointerup', up);
+        bar.removeEventListener('pointercancel', up);
+      };
+      bar.addEventListener('pointermove', mv);
+      bar.addEventListener('pointerup', up);
+      bar.addEventListener('pointercancel', up);
+    });
+  },
+  terminal(w) {
+    const out = w.querySelector('.term-out'),
+      form = w.querySelector('form'),
+      inp = w.querySelector('input'),
+      body = w.querySelector('.win-body');
+    const print = (s) => {
+      out.textContent += s + '\n';
+      body.scrollTop = body.scrollHeight;
+    };
+    print('PORTFOLIO-DOS v1.0. Escribí HELP para ver los comandos.\n');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const raw = inp.value.trim();
+      inp.value = '';
+      print('C:\\> ' + raw);
+      runCommand(raw, {
+        print,
+        clear: () => {
+          out.textContent = '';
+        },
+        openProject: (id) => this.openWin('project', id),
+      });
+    });
+    w.querySelector('.win-body').addEventListener('click', () => inp.focus());
+    setTimeout(() => inp.focus({ preventScroll: true }), 40);
+  },
+};
+
+export function initComputer() {
+  OS.buildIcons();
+  setInterval(() => {
+    const d = new Date();
+    $('#osClock').textContent = pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+  }, 1000);
+}
+
+export { OS };

@@ -1,0 +1,106 @@
+/* Reset mínimo */
+:root {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+body {
+  margin: 0;
+  font-size: 14px;
+}
+img {
+  max-width: 100%;
+}
+[hidden] {
+  display: none !important;
+}
+
+/* Layout: escena WebGL a pantalla completa con HUD fijo; cada objeto abre una capa propia (CRT, carpeta, ficha, notas) encima de la escena */
+:root {
+  --void: #060706;
+  --soot: #0e110e;
+  --bone: #d4ccb4;
+  --dim: #8b8670;
+  --phos: #95d68a;
+  --phos-dim: #3d6a3a;
+  --phos-bg: #050c06;
+  --blood: #9e141c;
+  --blood-hi: #d12b2b;
+  --tape-ink: #f1e6dc;
+  --paper: #d8ceb0;
+  --paper-ink: #29251e;
+  --manila: #b0904f;
+  --card: #e2dac2;
+  --rule: #8ea3a6;
+  --bezel: #8a7f63;
+  --bezel-dk: #3f3a2c;
+  --note-y: #d6c05a;
+  --note-p: #c98b8a;
+  --note-g: #9fb47c;
+  --f-ui: 'VT323', 'Courier New', monospace;
+  --f-type: 'Special Elite', 'Courier New', monospace;
+  --f-hand: 'Permanent Marker', 'Marker Felt', 'Comic Sans MS', cursive;
+  --f-text: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .16  0 0 0 0 .13  0 0 0 0 .09  0 0 0 .38 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme: dark;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  background: var(--void);
+  color: var(--bone);
+  font-family: var(--f-text);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+:focus-visible {
+  outline: 2px solid var(--blood-hi);
+  outline-offset: 2px;
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#gl {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  touch-action: none;
+  cursor: default;
+}
+#gl.hot {
+  cursor: pointer;
+}
+#gl.pet {
+  cursor: grab;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0s !important;
+  }
+  .heart {
+    opacity: 1;
+  }
+}
