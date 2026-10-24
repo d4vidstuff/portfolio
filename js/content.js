@@ -20,14 +20,20 @@ export const CONTENT = {
       tech: ['React 18', 'WebGL / OGL', 'Firebase', 'Web Audio API', 'SEO', 'Netlify'],
       link: 'https://lametalica.com.ar',
       photos: [
-        { src: '', alt: 'Inicio con la aurora animada' },
-        { src: '', alt: 'Galería de trabajos arrastrable' },
-        { src: '', alt: 'Sección Metalmecánica con degradé y grano' },
-        { src: '', alt: 'Versión para celular' },
-        { src: '', alt: 'Panel: ingreso con Google' },
-        { src: '', alt: 'Panel: editor de textos y colores' },
-        { src: '', alt: 'Panel: vista previa en vivo antes de guardar' },
-        { src: '', alt: 'Minijuego en SVG' },
+        { src: 'img/proyectos/01/1-inicio.jpg', alt: 'Inicio con la aurora animada' },
+        {
+          src: 'img/proyectos/01/2-minijuego.jpg',
+          alt: 'Minijuego "Jornada en altura" en SVG animado',
+        },
+        {
+          src: 'img/proyectos/01/3-metalmecanica.jpg',
+          alt: 'Sección Metalmecánica con trabajos realizados',
+        },
+        {
+          src: 'img/proyectos/01/4-metalmecanica-hero.jpg',
+          alt: 'Encabezado de Metalmecánica con degradé y grano',
+        },
+        { src: 'img/proyectos/01/5-equipos.jpg', alt: 'Selector de equipos por altura' },
       ],
     },
     {

@@ -103,10 +103,10 @@ with sync_playwright() as p:
         def gallery():
             G = '[data-win="project-01"] '
             cnt = lambda: pg.inner_text(G + '.gal-count')
-            assert cnt() == '1 / 8', cnt()
-            pg.click(G + '.gal-next'); assert cnt() == '2 / 8', cnt()
-            pg.click(G + '.gal-thumb[data-i="7"]'); assert cnt() == '8 / 8', cnt()
-            pg.focus(G + '.gal'); pg.keyboard.press('ArrowRight'); assert cnt() == '1 / 8', cnt()
+            assert cnt() == '1 / 5', cnt()
+            pg.click(G + '.gal-next'); assert cnt() == '2 / 5', cnt()
+            pg.click(G + '.gal-thumb[data-i="4"]'); assert cnt() == '5 / 5', cnt()
+            pg.focus(G + '.gal'); pg.keyboard.press('ArrowRight'); assert cnt() == '1 / 5', cnt()
             assert 'Inicio con la aurora' in pg.inner_text(G + '.gal-cap')
             pg.screenshot(path=shot_dir + '/os-gallery.png')
         step('galería de fotos', gallery)
