@@ -85,7 +85,7 @@ export const CONTENT = {
       { name: 'Español', level: 'Nativo' },
       { name: 'Inglés', level: 'Intermedio' },
     ],
-    pdf: '#',
+    pdf: 'https://drive.google.com/file/d/1Be82fO6iRXpOZANVq9jmbiGs-7I0EYef/view?usp=sharing',
   },
   /** Cartel "Disponible para trabajar" de la barra superior, el contacto y el CV. Con open: false se oculta. */
   availability: {
