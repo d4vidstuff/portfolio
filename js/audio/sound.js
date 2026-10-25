@@ -326,6 +326,22 @@ const sound = {
         this.noise(0.18, 'bandpass', 1800, 300, 0.5, 1.5);
         this.tone('square', 220, 70, 0.12, 0.05);
         break;
+      case 'shotgun':
+        // estampido, y después el "chk-chk" del bombeo
+        this.noise(0.32, 'lowpass', 2600, 160, 0.9, 0.8);
+        this.tone('square', 140, 40, 0.18, 0.08);
+        this.noise(0.05, 'bandpass', 3200, 2400, 0.45, 4, 0.31);
+        this.noise(0.06, 'bandpass', 2200, 1600, 0.5, 4, 0.5);
+        break;
+      case 'pickup':
+        this.tone('square', 660, 660, 0.06, 0.04);
+        this.tone('square', 990, 990, 0.1, 0.04, 0.07);
+        break;
+      case 'lose':
+        [392, 330, 262, 196].forEach((f, i) =>
+          this.tone('square', f, f * 0.98, 0.18, 0.04, i * 0.18),
+        );
+        break;
       case 'bughit':
         this.tone('square', 660, 440, 0.07, 0.04);
         break;

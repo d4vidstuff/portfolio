@@ -51,8 +51,11 @@ js/
   computer/           PORTFOLIO-DOS: contenido (os.js), ventanas que se mueven,
                       agrandan y minimizan (windows.js), galería de fotos
                       (gallery.js), comandos (terminal.js) y el juego
-                      DEBUG.EXE (games/debug.js, un raycaster en canvas 2D).
+                      DEBUG.EXE (games/debug/: un raycaster en canvas 2D con
+                      4 niveles en levels.js, enemigos en enemies.js y
+                      gráficos en art.js).
 tools/smoke.py        Prueba automática en Chromium (ver abajo).
+tools/game_test.py    Prueba completa de DEBUG.EXE (niveles, disparo, IA).
 ```
 
 ## Tareas comunes
@@ -66,6 +69,7 @@ tools/smoke.py        Prueba automática en Chromium (ver abajo).
 | Mover o agregar un objeto 3D | `js/scene/objects/` y registrarlo en `js/desk/start.js` |
 | Ajustar cuándo se despierta Benja | `js/desk/start.js` (`Cat.next`) y `js/cat/benja.js` |
 | Cambiar colores de la interfaz | `css/base.css` |
+| Editar o agregar niveles de DEBUG.EXE | `js/computer/games/debug/levels.js` |
 
 ## Correr en local
 

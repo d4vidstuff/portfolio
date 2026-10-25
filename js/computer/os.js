@@ -10,7 +10,7 @@ import { go, goBack } from '../desk/actions.js';
 import { runCommand } from './terminal.js';
 import { createWindowManager } from './windows.js';
 import { coverHTML, galleryHTML, initGallery } from './gallery.js';
-import { mountDebugGame } from './games/debug.js';
+import { mountDebugGame } from './games/debug/index.js';
 
 const ICONS = {
   folder: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3h5l2 2h7v9H1z"/></svg>',
