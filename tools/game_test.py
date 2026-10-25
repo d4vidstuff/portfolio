@@ -41,7 +41,12 @@ with sync_playwright() as p:
     pg.wait_for_selector('#enter', state='visible'); pg.click('#enter'); pg.wait_for_timeout(2300)
     pg.evaluate("document.querySelector('[data-go=pc]').click()"); pg.wait_for_selector('.win', timeout=9000)
     pg.click('[data-k="debug"]'); pg.wait_for_selector('.game-canvas'); pg.wait_for_timeout(300)
+    w0 = pg.evaluate("document.querySelector('.game-canvas').getBoundingClientRect().width")
     pg.dblclick('[data-win="debug"] .win-title'); pg.wait_for_timeout(300)
+    w1 = pg.evaluate("document.querySelector('.game-canvas').getBoundingClientRect().width")
+    h1 = pg.evaluate("document.querySelector('.game-canvas').getBoundingClientRect().height")
+    vis = min(w1, h1 * 1.6)  # ancho visible: object-fit mantiene 320x200
+    check('al maximizar, el juego se agranda', vis > w0 * 1.15, f'{w0:.0f}px → {vis:.0f}px de ancho visible')
     canvas = pg.locator('.game-canvas')
     shot = lambda name: canvas.screenshot(path=str(out / f'{name}.png'))
     shot('0-titulo')
@@ -120,6 +125,25 @@ with sync_playwright() as p:
     shot('9-derrota')
     pg.wait_for_timeout(200); pg.click('.game-canvas'); pg.wait_for_timeout(100)
     check('reintentar vuelve al mismo nivel', pg.evaluate(G + '.level') == 2 and pg.evaluate(G + '.player.hp') == 100)
+    # 6) música: con el sonido activado, el bus de efectos tiene que tener señal mientras se juega
+    pg.dblclick('[data-win="debug"] .win-title'); pg.wait_for_timeout(200)
+    r0 = pg.evaluate("document.querySelector('.game-canvas').getBoundingClientRect().width")
+    hdl = pg.locator('[data-win="debug"] .win-rs-se').bounding_box()
+    pg.mouse.move(hdl['x'] + 5, hdl['y'] + 5); pg.mouse.down(); pg.mouse.move(hdl['x'] + 200, hdl['y'] + 120, steps=6); pg.mouse.up()
+    pg.wait_for_timeout(150)
+    r1 = pg.evaluate("document.querySelector('.game-canvas').getBoundingClientRect().width")
+    check('al estirar la ventana, el juego se agranda', r1 > r0 + 100, f'{r0:.0f}px → {r1:.0f}px')
+    pg.click('#btnSound'); pg.wait_for_timeout(300)
+    pg.evaluate("""import('./js/audio/sound.js').then(({ sound }) => {
+      const a = sound.ctx.createAnalyser(); a.fftSize = 2048; sound.sfxBus.connect(a); window.__an = a; })""")
+    pg.evaluate(C + '.loadLevel(3)'); pg.evaluate(C + ".setState('play')")
+    pg.wait_for_timeout(1500)
+    rms = "(() => { const a = window.__an, d = new Float32Array(a.fftSize); let m = 0; for (let i = 0; i < 20; i++) { a.getFloatTimeDomainData(d); for (const v of d) m = Math.max(m, Math.abs(v)); } return m; })()"
+    peak = pg.evaluate(rms)
+    check('suena la banda sonora mientras se juega', peak > 0.02, f'pico {peak:.3f}')
+    pg.click('[data-win="debug"] .win-x'); pg.wait_for_timeout(1200)
+    peak2 = pg.evaluate(rms)
+    check('al cerrar el juego, la música para', peak2 < peak * 0.3, f'pico {peak2:.3f}')
     b.close()
 
 print('\n'.join(log))

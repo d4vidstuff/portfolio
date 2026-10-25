@@ -17,6 +17,7 @@ import { sound } from '../../../audio/sound.js';
 import { LEVELS, WALLS, ENEMY_CHARS } from './levels.js';
 import { ENEMY_TYPES, flowField, updateEnemy, separate } from './enemies.js';
 import { WALL_TEX, ENEMY_ART, ITEM_ART, drawShotgun, RELOAD_TIME } from './art.js';
+import { createMusic } from './music.js';
 
 const W = 320;
 const H = 200;
@@ -555,12 +556,14 @@ export function mountDebugGame(root) {
       if (hint) text(hint, W / 2, 122, 11, '#8b8670');
     };
     const L = LEVELS[game.level];
-    if (game.state === 'title')
+    if (game.state === 'title') {
       panel(
         'DEBUG.EXE',
         '4 niveles de bugs, glitches y memory leaks',
         '[ click o espacio para empezar ]',
       );
+      if (!sound.on) text('Activá el sonido para la banda sonora', W / 2, 146, 11, '#3d6a3a');
+    }
     if (game.state === 'intro')
       panel(`NIVEL ${game.level + 1}: ${L.name}`, L.intro, '[ click para arrancar ]');
     if (game.state === 'clear')
@@ -626,12 +629,27 @@ export function mountDebugGame(root) {
   setState('title');
   let last = performance.now();
   let raf = 0;
+  const music = createMusic(sound);
+  let musicOn = false;
+  /** La música suena mientras se juega y la ventana está a la vista. */
+  function syncMusic(visible) {
+    const want = visible && ['intro', 'play', 'clear'].includes(game.state);
+    if (want) music.play(game.level);
+    else if (musicOn) music.stop();
+    musicOn = want;
+  }
+
   function frame(now) {
-    if (!canvas.isConnected) return;
+    if (!canvas.isConnected) {
+      music.stop(); // se cerró la ventana
+      return;
+    }
     raf = requestAnimationFrame(frame);
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    if (canvas.offsetParent === null) return; // ventana minimizada
+    const visible = canvas.offsetParent !== null; // false con la ventana minimizada
+    syncMusic(visible);
+    if (!visible) return;
     update(dt);
     render();
   }
@@ -642,6 +660,7 @@ export function mountDebugGame(root) {
   canvas.gameControl = { loadLevel, setState, press, kill };
 
   return () => {
+    music.stop();
     cancelAnimationFrame(raf);
     held.clear();
   };

@@ -173,6 +173,8 @@ const OS = {
       return {
         title: 'DEBUG.EXE',
         width: 680,
+        height: 520,
+        bodyClass: 'win-body--game',
         x: 200,
         y: 24,
         html: '<div class="game"></div>',

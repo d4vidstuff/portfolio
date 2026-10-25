@@ -94,6 +94,11 @@ const sound = {
     this.load();
     return true;
   },
+  /** Baja el zumbido y la música ambiente mientras suena otra música (DEBUG.EXE). */
+  duck(on) {
+    if (!this.ctx) return;
+    this.amb.gain.setTargetAtTime(on ? 0.12 : 0.75, this.ctx.currentTime, 0.3);
+  },
   pad() {
     const c = this.ctx,
       notes = [110, 130.81, 98, 146.83, 123.47, 87.31, 164.81];

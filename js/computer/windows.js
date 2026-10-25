@@ -20,7 +20,7 @@ export function createWindowManager(area, taskbar) {
   let zTop = 5;
   let cascade = 0;
 
-  function open(id, { title, html, width = 460, height, x, y }) {
+  function open(id, { title, html, width = 460, height, x, y, bodyClass = '' }) {
     if (wins.has(id)) {
       restore(id);
       return wins.get(id).el;
@@ -39,7 +39,7 @@ export function createWindowManager(area, taskbar) {
           <button class="win-btn win-x" data-act="close" aria-label="Cerrar ${esc(title)}">X</button>
         </div>
       </div>
-      <div class="win-body">${html}</div>
+      <div class="win-body ${bodyClass}">${html}</div>
       <div class="win-rs win-rs-e" data-rs="e" aria-hidden="true"></div>
       <div class="win-rs win-rs-s" data-rs="s" aria-hidden="true"></div>
       <div class="win-rs win-rs-se" data-rs="se" aria-hidden="true"></div>`;
