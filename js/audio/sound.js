@@ -322,6 +322,25 @@ const sound = {
       case 'crtoff':
         this.tone('sine', 1400, 60, 0.4, 0.05);
         break;
+      case 'shot':
+        this.noise(0.18, 'bandpass', 1800, 300, 0.5, 1.5);
+        this.tone('square', 220, 70, 0.12, 0.05);
+        break;
+      case 'bughit':
+        this.tone('square', 660, 440, 0.07, 0.04);
+        break;
+      case 'bugdie':
+        this.tone('square', 520, 90, 0.35, 0.05);
+        this.noise(0.25, 'lowpass', 1200, 200, 0.25);
+        break;
+      case 'hurt':
+        this.tone('sawtooth', 140, 70, 0.22, 0.06);
+        break;
+      case 'win':
+        [523, 659, 784, 1047, 1319].forEach((f, i) =>
+          this.tone('square', f, f, 0.12, 0.04, i * 0.11),
+        );
+        break;
       case 'crton':
         this.noise(0.3, 'highpass', 6000, 9000, 0.2);
         this.tone('sine', 60, 15600, 0.25, 0.015);

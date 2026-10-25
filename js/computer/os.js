@@ -10,6 +10,7 @@ import { go, goBack } from '../desk/actions.js';
 import { runCommand } from './terminal.js';
 import { createWindowManager } from './windows.js';
 import { coverHTML, galleryHTML, initGallery } from './gallery.js';
+import { mountDebugGame } from './games/debug.js';
 
 const ICONS = {
   folder: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3h5l2 2h7v9H1z"/></svg>',
@@ -19,6 +20,7 @@ const ICONS = {
     '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3h14v11H1z"/><path d="M2 8h12v1H2zM6 5h4v1H6zM6 10h4v1H6z" fill="#050c06"/></svg>',
   phone:
     '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 4h14v3h-3V5H4v2H1zM4 8h8v6H4z"/><path d="M7 10h2v2H7z" fill="#050c06"/></svg>',
+  bug: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 1h1v1h2V1h1v2h1v2h2v1h-2v2h2v1h-2v2h2v1h-2v1H9v1H7v-1H5v-1H3v-1h2V9H3V8h2V6H3V5h2V3h1z"/><path d="M8 4h0v9h0z" fill="#050c06"/><path d="M7.5 5h1v8h-1z" fill="#050c06"/></svg>',
   power:
     '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M7 1h2v7H7zM3 4h2v2H4v4h1v1h1v1h4v-1h1v-1h1V6h-1V4h2v1h1v6h-1v1h-1v1h-1v1H5v-1H4v-1H3v-1H2V5h1z"/></svg>',
 };
@@ -120,6 +122,7 @@ const OS = {
       ['terminal', 'TERMINAL', 'term'],
       ['cv', 'CV.LNK', 'drawer'],
       ['contact', 'CONTACTO', 'phone'],
+      ['debug', 'DEBUG.EXE', 'bug'],
       ['off', 'APAGAR', 'power'],
     ];
     $('#osIcons').innerHTML = list
@@ -166,6 +169,14 @@ const OS = {
           ${CONTENT.availability?.open ? `<p class="os-hire">● ${esc(CONTENT.availability.label)}. <button class="os-link" data-k="contact">${esc(CONTENT.availability.cta).toUpperCase()} →</button></p>` : ''}
           <p class="meta">Tip: abrí TERMINAL y escribí HELP.</p>`,
       };
+    if (key === 'debug')
+      return {
+        title: 'DEBUG.EXE',
+        width: 680,
+        x: 200,
+        y: 24,
+        html: '<div class="game"></div>',
+      };
     if (key === 'terminal')
       return {
         title: 'TERMINAL.EXE',
@@ -208,6 +219,7 @@ const OS = {
         w,
         CONTENT.projects.find((x) => x.id === arg),
       );
+    if (key === 'debug') mountDebugGame(w.querySelector('.game'));
     if (key === 'terminal') this.terminal(w);
     else setTimeout(() => w.querySelector('.win-x').focus({ preventScroll: true }), 30);
   },
@@ -232,6 +244,7 @@ const OS = {
           out.textContent = '';
         },
         openProject: (id) => this.openWin('project', id),
+        openApp: (key) => this.openWin(key),
       });
     });
     w.querySelector('.win-body').addEventListener('click', () => inp.focus());

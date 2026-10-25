@@ -9,7 +9,7 @@ import { go, goBack } from '../desk/actions.js';
  * @param {string} raw lo que escribió la persona
  * @param {{ print: (s: string) => void, clear: () => void, openProject: (id: string) => void }} io
  */
-export function runCommand(raw, { print, clear, openProject }) {
+export function runCommand(raw, { print, clear, openProject, openApp }) {
   const [cmd, ...args] = raw.toLowerCase().split(/\s+/);
   switch (cmd) {
     case '':
@@ -24,6 +24,7 @@ export function runCommand(raw, { print, clear, openProject }) {
           '  OPEN <n>    abre un proyecto (ej. OPEN 1)',
           '  CONTACT     datos de contacto',
           '  HIRE        ¿estoy disponible para trabajar?',
+          '  DEBUG       un juego: cazá los bugs',
           '  CV          ir al cajón del CV',
           '  DATE        fecha y hora',
           '  CLS         limpiar la pantalla',
@@ -77,6 +78,15 @@ export function runCommand(raw, { print, clear, openProject }) {
     case 'cv':
       print('El CV está en la cajonera. Apagando...\n');
       setTimeout(() => go('drawer'), 700);
+      break;
+    case 'debug':
+    case 'jugar':
+      print('Cargando DEBUG.EXE...\n');
+      openApp('debug');
+      break;
+    case 'doom':
+      print('DOOM no está instalado en esta PC.\nPero hay algo parecido: cargando DEBUG.EXE...\n');
+      openApp('debug');
       break;
     case 'benja':
     case 'gato':

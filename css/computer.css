@@ -615,3 +615,69 @@
   margin-left: 6px;
   font: inherit;
 }
+
+/* DEBUG.EXE */
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.game-screen {
+  position: relative;
+}
+.game-canvas {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 320 / 200;
+  image-rendering: pixelated;
+  background: #000;
+  border: 1px solid var(--phos-dim);
+  cursor: crosshair;
+  outline: none;
+  touch-action: none;
+}
+.game-canvas:focus-visible {
+  border-color: var(--phos);
+}
+.win.is-max .game-canvas {
+  width: auto;
+  height: calc(100% - 4px);
+  max-height: 64vh;
+  margin: 0 auto;
+}
+.game-help {
+  margin: 0;
+  color: var(--phos-dim);
+  font-size: 16px;
+}
+/* botones táctiles: solo en pantallas sin mouse */
+.game-touch {
+  display: none;
+}
+@media (pointer: coarse) {
+  .game-touch {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .game-touch button {
+    flex: 1;
+    min-height: 44px;
+    font-size: 18px;
+    color: var(--phos);
+    border: 1px solid var(--phos-dim);
+    touch-action: none;
+    user-select: none;
+  }
+  .game-touch .game-fire {
+    flex: 1.6;
+    background: var(--phos);
+    color: var(--phos-bg);
+    text-shadow: none;
+  }
+  .game-help {
+    display: none;
+  }
+}

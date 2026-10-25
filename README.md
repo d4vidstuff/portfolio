@@ -27,6 +27,7 @@ css/                  Un archivo por parte de la interfaz.
   loader.css          Pantalla de carga.
 audio/                Maullido y sacudida.
 img/proyectos/<id>/   Fotos de cada proyecto.
+img/icons/            Favicon de Benja (SVG, PNG e ICO en la raíz).
 js/
   main.js             Punto de entrada. Si no hay WebGL, muestra el modo texto.
   content.js          TODO el texto: nombre, bio, proyectos, CV, contacto, notas.
@@ -49,7 +50,8 @@ js/
   cat/                Benja despierto: poses, comportamiento, caricias y globo.
   computer/           PORTFOLIO-DOS: contenido (os.js), ventanas que se mueven,
                       agrandan y minimizan (windows.js), galería de fotos
-                      (gallery.js) y comandos (terminal.js).
+                      (gallery.js), comandos (terminal.js) y el juego
+                      DEBUG.EXE (games/debug.js, un raycaster en canvas 2D).
 tools/smoke.py        Prueba automática en Chromium (ver abajo).
 ```
 

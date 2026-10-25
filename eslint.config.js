@@ -6,7 +6,8 @@ export default [
       sourceType: 'module',
       globals: {
         window: 'readonly', document: 'readonly', navigator: 'readonly', performance: 'readonly',
-        requestAnimationFrame: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly',
+        requestAnimationFrame: 'readonly',
+        cancelAnimationFrame: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly',
         setInterval: 'readonly', clearInterval: 'readonly', matchMedia: 'readonly', getSelection: 'readonly',
         innerWidth: 'readonly', innerHeight: 'readonly', addEventListener: 'readonly', fetch: 'readonly',
         console: 'readonly',

@@ -99,6 +99,18 @@ with sync_playwright() as p:
             pg.fill('#termIn', 'cls'); pg.press('#termIn', 'Enter')
             assert pg.inner_text('.term-out').strip() == '', 'cls'
         step('terminal', terminal)
+        def game():
+            pg.click('[data-k="debug"]'); pg.wait_for_selector('.game-canvas', timeout=3000)
+            pg.click('.game-canvas'); pg.wait_for_timeout(200)
+            pg.evaluate("""(() => { const g = document.querySelector('.game-canvas').gameState();
+              const b = g.bugs[0]; g.x = 10.5; g.y = 1.5; g.dx = 1; g.dy = 0; g.planeX = 0; g.planeY = 0.66;
+              b.x = 13.5; b.y = 1.5; g.bugs.slice(1).forEach(o => { o.x = 1.5; o.y = 11.5; }); })()""")
+            pg.wait_for_timeout(100)
+            for _ in range(3): pg.keyboard.press('Space'); pg.wait_for_timeout(420)
+            left = pg.evaluate("document.querySelector('.game-canvas').gameState().bugs.filter(b => b.alive).length")
+            assert left == 7, left
+            pg.click('[data-win="debug"] .win-x')
+        step('DEBUG.EXE: matar un bug', game)
         step('abrir proyecto 01', lambda: pg.wait_for_selector('[aria-label="PROYECTO_01.DSK"]', timeout=2000))
         def gallery():
             G = '[data-win="project-01"] '
