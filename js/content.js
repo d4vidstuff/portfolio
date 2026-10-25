@@ -93,10 +93,13 @@ export const CONTENT = {
     label: 'Disponible para trabajar',
     cta: 'Hablemos',
     pitch:
-      'Estoy buscando mi primer trabajo como desarrollador frontend. Si tenés un puesto o un proyecto, escribime por email o LinkedIn.',
+      'Estoy buscando mi primer trabajo como desarrollador frontend. Si tenés un puesto o un proyecto, escribime por email, WhatsApp o LinkedIn.',
   },
   contact: {
     email: 'nachog.david@gmail.com',
+    /** Teléfono como se muestra, y el mismo número para el link de WhatsApp (solo dígitos, con el 9 de celular). */
+    phone: '+54 3462 41-4283',
+    whatsapp: '5493462414283',
     links: [
       {
         label: 'LinkedIn',

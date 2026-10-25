@@ -28,7 +28,7 @@ function renderTextMode() {
   <section><h2>Sobre mí</h2><p>${esc(CONTENT.bio)}</p></section>
   <section><h2>Proyectos</h2><ul>${CONTENT.projects.map((p) => `<li><h3>${esc(p.name)} <span>${esc(p.year)}</span></h3><p>${esc(p.desc)}</p><p class="tech">${p.tech.map(esc).join(' · ')}</p>${photosHTML(p)}<p>${linkHTML(p.link, 'Ver proyecto')}</p></li>`).join('')}</ul></section>
   ${cvHTML()}
-  <section id="tm-contacto"><h2>Contacto</h2>${CONTENT.availability?.open ? `<p>${esc(CONTENT.availability.pitch)}</p>` : ''}<dl><dt>Email</dt><dd>${esc(CONTENT.contact.email)}</dd>${CONTENT.contact.links.map((l) => `<dt>${esc(l.label)}</dt><dd>${linkHTML(l.url, l.text)}</dd>`).join('')}</dl></section>
+  <section id="tm-contacto"><h2>Contacto</h2>${CONTENT.availability?.open ? `<p>${esc(CONTENT.availability.pitch)}</p>` : ''}<dl><dt>Email</dt><dd>${esc(CONTENT.contact.email)}</dd>${CONTENT.contact.phone ? `<dt>Teléfono</dt><dd>${esc(CONTENT.contact.phone)}${CONTENT.contact.whatsapp ? ' · ' + linkHTML('https://wa.me/' + CONTENT.contact.whatsapp, 'WhatsApp') : ''}</dd>` : ''}${CONTENT.contact.links.map((l) => `<dt>${esc(l.label)}</dt><dd>${linkHTML(l.url, l.text)}</dd>`).join('')}</dl></section>
   <section><h2>Notas sueltas</h2><ul>${CONTENT.notes.map((n) => `<li>${esc(n)}</li>`).join('')}</ul></section>`;
   $('#tmBack').addEventListener('click', () => setTextMode(false));
 }

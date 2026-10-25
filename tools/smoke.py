@@ -122,7 +122,7 @@ with sync_playwright() as p:
         step('CV con título ICES', lambda: 'ICES' in pg.inner_text('#cvPaper') or (_ for _ in ()).throw(Exception('sin ICES')))
         step('cerrar CV', lambda: (pg.click('#cvPaper [data-close]'), pg.wait_for_timeout(1500), pg.wait_for_selector('#ov-cv', state='hidden', timeout=3000)))
         step('módem abre contacto', lambda: (go('modem'), pg.wait_for_selector('#ov-contact.in', timeout=5000)))
-        step('copiar mail', lambda: (pg.click('#copyMail'), pg.wait_for_timeout(300)))
+        step('copiar mail y teléfono', lambda: (pg.click('[data-copy="mailText"]'), pg.click('[data-copy="phoneText"]'), pg.wait_for_timeout(300)))
         step('volver con Escape', lambda: (pg.keyboard.press('Escape'), pg.wait_for_timeout(1500), pg.wait_for_selector('#ov-contact', state='hidden', timeout=3000)))
         step('cartel disponible abre contacto', lambda: (pg.click('#btnHire'), pg.wait_for_selector('#ov-contact.in', timeout=5000), pg.wait_for_timeout(400), pg.screenshot(path=shot_dir + '/hire-contacto.png'), back()))
         step('notas', lambda: (go('notes'), pg.wait_for_selector('#ov-notes.in', timeout=4000), back()))

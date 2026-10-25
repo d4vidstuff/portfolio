@@ -8,7 +8,7 @@ import { toast } from './toast.js';
 function renderOverlays() {
   const cv = CONTENT.cv;
   $('#cvPaper').innerHTML = `
-    <div class="paper-top"><div><h2>${esc(CONTENT.name)}</h2><p class="sub">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p><p class="line">${esc(CONTENT.contact.email)}</p>${CONTENT.availability?.open ? `<p class="avail-stamp">${esc(CONTENT.availability.label)}</p>` : ''}</div>
+    <div class="paper-top"><div><h2>${esc(CONTENT.name)}</h2><p class="sub">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p><p class="line">${esc(CONTENT.contact.email)}${CONTENT.contact.phone ? ' · ' + esc(CONTENT.contact.phone) : ''}</p>${CONTENT.availability?.open ? `<p class="avail-stamp">${esc(CONTENT.availability.label)}</p>` : ''}</div>
     <button class="paper-close" data-close>Cerrar cajón</button></div>
     <h3>Proyecto destacado</h3>${cv.experience.map((x) => `<div class="item"><strong>${esc(x.role)} — ${esc(x.company)}</strong><span class="when">${esc(x.period)}</span><p>${esc(x.desc)}</p></div>`).join('')}
     <h3>Educación</h3>${cv.education.map((x) => `<div class="item"><strong>${esc(x.title)} — ${esc(x.place)}</strong><span class="when">${esc(x.period)}</span></div>`).join('')}
@@ -19,7 +19,8 @@ function renderOverlays() {
     <h2>Conectado a 2400 baudios</h2>
     ${CONTENT.availability?.open ? `<p class="card-pitch"><span class="hire-dot" aria-hidden="true"></span>${esc(CONTENT.availability.label)}. ${esc(CONTENT.availability.pitch)}</p>` : ''}
     <dl>
-      <dt>Email</dt><dd><span id="mailText">${esc(CONTENT.contact.email)}</span><button class="mini" id="copyMail">Copiar</button></dd>
+      <dt>Email</dt><dd><span id="mailText">${esc(CONTENT.contact.email)}</span><button class="mini" data-copy="mailText" data-what="Email">Copiar</button></dd>
+      ${CONTENT.contact.phone ? `<dt>Teléfono</dt><dd><span id="phoneText">${esc(CONTENT.contact.phone)}</span><button class="mini" data-copy="phoneText" data-what="Teléfono">Copiar</button>${CONTENT.contact.whatsapp ? linkHTML('https://wa.me/' + CONTENT.contact.whatsapp, 'WhatsApp') : ''}</dd>` : ''}
       ${CONTENT.contact.links.map((l) => `<dt>${esc(l.label)}</dt><dd>${linkHTML(l.url, l.text)}</dd>`).join('')}
     </dl>
     <p class="foot">El módem tarda, pero llega. Para algo urgente, mejor un email.</p>
@@ -35,19 +36,22 @@ function renderOverlays() {
   }
   $('#tape').innerHTML =
     `${esc(CONTENT.name)}<span class="hud-long"> · ${esc(CONTENT.role)}</span>`;
-  $('#copyMail').addEventListener('click', () => {
-    const txt = CONTENT.contact.email;
-    const done = () => toast('Email copiado.');
+  // botones "Copiar" (email y teléfono)
+  $('#contactCard').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-copy]');
+    if (!btn) return;
+    const el = $('#' + btn.dataset.copy);
+    const done = () => toast(btn.dataset.what + ' copiado.');
     const fallback = () => {
       const r = document.createRange();
-      r.selectNodeContents($('#mailText'));
+      r.selectNodeContents(el);
       const s = getSelection();
       s.removeAllRanges();
       s.addRange(r);
       toast('Seleccionado. Copialo con Ctrl+C.');
     };
     try {
-      navigator.clipboard.writeText(txt).then(done, fallback);
+      navigator.clipboard.writeText(el.textContent).then(done, fallback);
     } catch (e) {
       fallback();
     }

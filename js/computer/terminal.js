@@ -70,6 +70,7 @@ export function runCommand(raw, { print, clear, openProject }) {
     case 'contact':
     case 'contacto':
       print('  EMAIL     ' + CONTENT.contact.email);
+      if (CONTENT.contact.phone) print('  TELÉFONO  ' + CONTENT.contact.phone);
       CONTENT.contact.links.forEach((l) => print('  ' + l.label.toUpperCase().padEnd(10) + l.text));
       print('');
       break;
