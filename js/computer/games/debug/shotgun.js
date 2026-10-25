@@ -46,8 +46,8 @@ const COLORS = {
   barrel: [29, 32, 36],
   rail: [61, 68, 76],
   skin: [201, 154, 122],
-  glove: [44, 45, 40],
-  knuckle: [82, 84, 74],
+  glove: [58, 60, 52],
+  knuckle: [104, 106, 92],
   cuff: [150, 112, 86],
   sleeve: [45, 58, 42],
   brass: [255, 207, 74],
@@ -91,8 +91,11 @@ function gunParts(pump, portOpen) {
   return P;
 }
 
-/** Caja orientada: centro y tres semiejes en el espacio de la cámara → 6 caras. */
-function boxFaces(c, a, b, d, color, out) {
+/**
+ * Caja orientada: centro y tres semiejes en el espacio de la cámara → 6 caras.
+ * skipTop: no dibuja la cara de arriba (+b), para piezas que van escondidas debajo de otra.
+ */
+function boxFaces(c, a, b, d, color, out, skipTop = false) {
   const corner = (sa, sb, sd) => add(add(add(c, mul(a, sa)), mul(b, sb)), mul(d, sd));
   const q = [
     [[1, -1, -1], [1, 1, -1], [1, 1, 1], [1, -1, 1], a],
@@ -102,7 +105,8 @@ function boxFaces(c, a, b, d, color, out) {
     [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], d],
     [[1, -1, -1], [-1, -1, -1], [-1, 1, -1], [1, 1, -1], mul(d, -1)],
   ];
-  for (const [p0, p1, p2, p3, n] of q) {
+  for (const [i, [p0, p1, p2, p3, n]] of q.entries()) {
+    if (skipTop && i === 2) continue;
     const pts = [p0, p1, p2, p3].map(([x, y, z]) => corner(x, y, z));
     const center = mul(add(add(pts[0], pts[1]), add(pts[2], pts[3])), 0.25);
     const normal = norm(n);
@@ -184,12 +188,65 @@ export function drawShotgun(ctx, W, viewH, t, walkBob) {
   boxFaces(gripHand, mul(U, 0.055), mul(V, 0.04), mul(S, 0.048), 'glove', hands);
   fingers(-0.1, -0.045, 0.05, 0.045);
   limb(add(gripHand, [0.02, 0.05, -0.02]), [0.75, 0.9, 0.35], 0.07, 'sleeve', faces);
-  // mano izquierda: la palma por debajo del guardamanos y los dedos cerrados sobre el costado
+  // mano izquierda agarrando el guardamanos desde abajo:
+  //  - la palma queda debajo (sin su cara de arriba, que está tapada por la madera)
+  //  - el pulgar va acostado a lo largo del costado que ve la cámara
+  //  - las puntas de los otros cuatro dedos asoman por el borde de arriba, desde el otro lado
   const fu = 0.46 - pump;
-  const palm = toView([fu, -0.1, 0.005]);
-  boxFaces(palm, mul(U, 0.075), mul(V, 0.026), mul(S, 0.054), 'glove', hands);
-  fingers(fu, 0.004, 0.085, 0.06);
-  boxFaces(toView([fu, -0.13, 0]), mul(U, 0.05), mul(V, 0.012), mul(S, 0.045), 'cuff', faces); // muñeca
+  const palm = toView([fu, -0.098, 0]);
+  boxFaces(palm, mul(U, 0.06), mul(V, 0.022), mul(S, 0.046), 'glove', hands, true);
+  boxFaces(
+    toView([fu - 0.035, -0.07, 0.053]),
+    mul(U, 0.03),
+    mul(V, 0.02),
+    mul(S, 0.01),
+    'glove',
+    hands,
+  ); // base del pulgar
+  boxFaces(
+    toView([fu + 0.03, -0.045, 0.056]),
+    mul(U, 0.045),
+    mul(V, 0.011),
+    mul(S, 0.009),
+    'glove',
+    hands,
+  ); // pulgar
+  boxFaces(
+    toView([fu + 0.08, -0.045, 0.057]),
+    mul(U, 0.01),
+    mul(V, 0.011),
+    mul(S, 0.009),
+    'knuckle',
+    hands,
+  ); // punta
+  [-1.5, -0.5, 0.5, 1.5].forEach((i) => {
+    const u = fu + 0.005 + i * 0.03;
+    boxFaces(
+      toView([u, 0.019, -0.03]),
+      mul(U, 0.012),
+      mul(V, 0.006),
+      mul(S, 0.018),
+      'glove',
+      hands,
+    );
+    boxFaces(
+      toView([u, 0.019, -0.008]),
+      mul(U, 0.012),
+      mul(V, 0.006),
+      mul(S, 0.005),
+      'knuckle',
+      hands,
+    );
+  });
+  boxFaces(
+    toView([fu - 0.01, -0.125, 0]),
+    mul(U, 0.045),
+    mul(V, 0.01),
+    mul(S, 0.04),
+    'cuff',
+    faces,
+    true,
+  ); // muñeca
   limb(add(palm, [0, 0.05, -0.03]), [0.05, 1.0, 0.55], 0.065, 'sleeve', faces);
   // cartucho que salta por la ventana
   if (t >= 0.36 && t < 0.62) {
