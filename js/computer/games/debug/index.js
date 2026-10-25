@@ -10,13 +10,15 @@
  * proyectiles son sprites que miran siempre a la cámara, recortados con el
  * z-buffer de las paredes.
  *
- * Archivos: levels.js (mapas), enemies.js (tipos y movimiento), art.js (gráficos).
+ * Archivos: levels.js (mapas), enemies.js (tipos y movimiento), art.js (texturas y
+ * sprites), shotgun.js (el arma en 3D) y music.js (la banda sonora).
  * Uso: const stop = mountDebugGame(contenedor);
  */
 import { sound } from '../../../audio/sound.js';
 import { LEVELS, WALLS, ENEMY_CHARS } from './levels.js';
 import { ENEMY_TYPES, flowField, updateEnemy, separate } from './enemies.js';
-import { WALL_TEX, ENEMY_ART, ITEM_ART, drawShotgun, RELOAD_TIME } from './art.js';
+import { WALL_TEX, ENEMY_ART, ITEM_ART } from './art.js';
+import { drawShotgun, RELOAD_TIME } from './shotgun.js';
 import { createMusic } from './music.js';
 
 const W = 320;
