@@ -608,3 +608,10 @@
     display: none;
   }
 }
+.os-hire {
+  color: var(--phos);
+}
+.os-hire .os-link {
+  margin-left: 6px;
+  font: inherit;
+}

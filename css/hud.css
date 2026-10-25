@@ -219,3 +219,76 @@ body.focused #hint {
     padding: 4px 8px;
   }
 }
+
+/* Nombre + cartel "Disponible para trabajar" */
+.hud-id {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+.hire {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--f-ui);
+  font-size: 19px;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--phos);
+  background: rgba(5, 12, 6, 0.88);
+  border: 1px solid var(--phos-dim);
+  padding: 4px 10px 5px;
+  margin-left: 6px;
+  transform: rotate(-1deg);
+  text-shadow: 0 0 6px rgba(149, 214, 138, 0.45);
+  white-space: nowrap;
+  max-width: 100%;
+}
+.hire:hover {
+  border-color: var(--phos);
+}
+.hire-cta {
+  color: var(--tape-ink);
+  border-left: 1px solid var(--phos-dim);
+  padding-left: 8px;
+}
+.hire:hover .hire-cta {
+  color: var(--phos);
+}
+.hire-dot {
+  display: inline-block;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--phos);
+  box-shadow: 0 0 8px var(--phos);
+  animation: hireblink 1.6s steps(2) infinite;
+}
+@keyframes hireblink {
+  50% {
+    opacity: 0.25;
+  }
+}
+body.focused .hire {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .hud-id {
+    gap: 6px;
+  }
+  .hire {
+    font-size: 14px;
+    letter-spacing: 0;
+    gap: 6px;
+    padding: 3px 8px 4px;
+    margin-left: 4px;
+  }
+  .hire-cta {
+    padding-left: 6px;
+  }
+}

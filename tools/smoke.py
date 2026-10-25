@@ -91,10 +91,10 @@ with sync_playwright() as p:
         def terminal():
             pg.click('[data-k="terminal"]')
             pg.wait_for_selector('#termIn', timeout=2000)
-            for c in ['help', 'projects', 'open 1', 'contact', 'benja', 'date', 'xyz']:
+            for c in ['help', 'projects', 'open 1', 'contact', 'hire', 'benja', 'date', 'xyz']:
                 pg.fill('#termIn', c); pg.press('#termIn', 'Enter')
             out = pg.inner_text('.term-out')
-            for want in ['Comandos:', 'La Metálica', 'nachog.david@gmail.com', 'BENJA.GAT', 'incorrecto']:
+            for want in ['Comandos:', 'DISPONIBLE PARA TRABAJAR', 'La Metálica', 'nachog.david@gmail.com', 'BENJA.GAT', 'incorrecto']:
                 assert want in out, want
             pg.fill('#termIn', 'cls'); pg.press('#termIn', 'Enter')
             assert pg.inner_text('.term-out').strip() == '', 'cls'
@@ -124,6 +124,7 @@ with sync_playwright() as p:
         step('módem abre contacto', lambda: (go('modem'), pg.wait_for_selector('#ov-contact.in', timeout=5000)))
         step('copiar mail', lambda: (pg.click('#copyMail'), pg.wait_for_timeout(300)))
         step('volver con Escape', lambda: (pg.keyboard.press('Escape'), pg.wait_for_timeout(1500), pg.wait_for_selector('#ov-contact', state='hidden', timeout=3000)))
+        step('cartel disponible abre contacto', lambda: (pg.click('#btnHire'), pg.wait_for_selector('#ov-contact.in', timeout=5000), pg.wait_for_timeout(400), pg.screenshot(path=shot_dir + '/hire-contacto.png'), back()))
         step('notas', lambda: (go('notes'), pg.wait_for_selector('#ov-notes.in', timeout=4000), back()))
         step('disquete abre proyecto', lambda: (go('floppy1'), pg.wait_for_selector('[aria-label="PROYECTO_02.DSK"]', timeout=9000), back()))
         step('walkman activa sonido', lambda: (go('walkman'), pg.wait_for_timeout(500), pg.wait_for_selector('#btnSound[aria-pressed="true"]', timeout=2000)))

@@ -32,6 +32,8 @@ const NAV = [
 ];
 
 export function initHud() {
+  // "Disponible para trabajar": lleva al contacto del módem
+  $('#btnHire').addEventListener('click', () => go('modem'));
   $('#objnav').innerHTML = NAV.map(([id, l]) => `<button data-go="${id}">${esc(l)}</button>`).join(
     '',
   );

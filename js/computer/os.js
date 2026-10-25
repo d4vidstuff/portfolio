@@ -163,6 +163,7 @@ const OS = {
         html: `<h3>${esc(CONTENT.name)}</h3>
           <p class="meta">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p>
           <p>${esc(CONTENT.bio)}</p>
+          ${CONTENT.availability?.open ? `<p class="os-hire">● ${esc(CONTENT.availability.label)}. <button class="os-link" data-k="contact">${esc(CONTENT.availability.cta).toUpperCase()} →</button></p>` : ''}
           <p class="meta">Tip: abrí TERMINAL y escribí HELP.</p>`,
       };
     if (key === 'terminal')
@@ -196,6 +197,9 @@ const OS = {
     const d = this.def(key, arg);
     if (!d) return;
     const w = this.wm.open(id, d);
+    w.querySelectorAll('[data-k="contact"]').forEach((b) =>
+      b.addEventListener('click', () => go('modem')),
+    );
     w.querySelectorAll('[data-pid]').forEach((b) =>
       b.addEventListener('click', () => this.openWin('project', b.dataset.pid)),
     );

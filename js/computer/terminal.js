@@ -23,6 +23,7 @@ export function runCommand(raw, { print, clear, openProject }) {
           '  PROJECTS    lista de proyectos',
           '  OPEN <n>    abre un proyecto (ej. OPEN 1)',
           '  CONTACT     datos de contacto',
+          '  HIRE        ¿estoy disponible para trabajar?',
           '  CV          ir al cajón del CV',
           '  DATE        fecha y hora',
           '  CLS         limpiar la pantalla',
@@ -54,6 +55,18 @@ export function runCommand(raw, { print, clear, openProject }) {
       } else print('Proyecto no encontrado. Probá PROJECTS.\n');
       break;
     }
+    case 'hire':
+    case 'trabajo':
+    case 'contratar':
+      if (CONTENT.availability?.open)
+        print(
+          'ESTADO: ' +
+            CONTENT.availability.label.toUpperCase() +
+            '\n' +
+            CONTENT.availability.pitch +
+            '\n',
+        );
+    // sigue con los datos de contacto
     case 'contact':
     case 'contacto':
       print('  EMAIL     ' + CONTENT.contact.email);

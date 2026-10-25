@@ -125,3 +125,30 @@ body.text-on #textmode {
   object-fit: cover;
   border: 1px solid #2a2c26;
 }
+.tm-hire {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 4px 12px;
+  border: 1px solid var(--phos-dim);
+  color: var(--phos);
+  font-family: var(--f-ui);
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.tm-hire .hire-dot {
+  margin-right: 8px;
+  vertical-align: 2px;
+}
+.tm-hire a {
+  margin-left: 10px;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .tm-hire {
+    font-size: 17px;
+  }
+}
+.tm .tm-hire a {
+  color: var(--tape-ink);
+}

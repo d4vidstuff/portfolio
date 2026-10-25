@@ -18,7 +18,7 @@ document.addEventListener('click', (e) => {
   const a = e.target.closest('a[data-ph]');
   if (a) {
     e.preventDefault();
-    toast('Link de ejemplo. Reemplazalo en CONTENT.');
+    toast('Link de ejemplo. Reemplazalo en content.js.');
   }
 });
 

@@ -8,7 +8,7 @@ import { toast } from './toast.js';
 function renderOverlays() {
   const cv = CONTENT.cv;
   $('#cvPaper').innerHTML = `
-    <div class="paper-top"><div><h2>${esc(CONTENT.name)}</h2><p class="sub">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p><p class="line">${esc(CONTENT.contact.email)}</p></div>
+    <div class="paper-top"><div><h2>${esc(CONTENT.name)}</h2><p class="sub">${esc(CONTENT.role)} · ${esc(CONTENT.location)}</p><p class="line">${esc(CONTENT.contact.email)}</p>${CONTENT.availability?.open ? `<p class="avail-stamp">${esc(CONTENT.availability.label)}</p>` : ''}</div>
     <button class="paper-close" data-close>Cerrar cajón</button></div>
     <h3>Proyecto destacado</h3>${cv.experience.map((x) => `<div class="item"><strong>${esc(x.role)} — ${esc(x.company)}</strong><span class="when">${esc(x.period)}</span><p>${esc(x.desc)}</p></div>`).join('')}
     <h3>Educación</h3>${cv.education.map((x) => `<div class="item"><strong>${esc(x.title)} — ${esc(x.place)}</strong><span class="when">${esc(x.period)}</span></div>`).join('')}
@@ -17,6 +17,7 @@ function renderOverlays() {
     ${linkHTML(cv.pdf, 'Descargar PDF', 'stamp')}`;
   $('#contactCard').innerHTML = `
     <h2>Conectado a 2400 baudios</h2>
+    ${CONTENT.availability?.open ? `<p class="card-pitch"><span class="hire-dot" aria-hidden="true"></span>${esc(CONTENT.availability.label)}. ${esc(CONTENT.availability.pitch)}</p>` : ''}
     <dl>
       <dt>Email</dt><dd><span id="mailText">${esc(CONTENT.contact.email)}</span><button class="mini" id="copyMail">Copiar</button></dd>
       ${CONTENT.contact.links.map((l) => `<dt>${esc(l.label)}</dt><dd>${linkHTML(l.url, l.text)}</dd>`).join('')}
@@ -26,6 +27,12 @@ function renderOverlays() {
   $('#notesWrap').innerHTML = CONTENT.notes
     .map((n) => `<div class="note">${esc(n)}</div>`)
     .join('');
+  const av = CONTENT.availability;
+  if (av?.open) {
+    $('#btnHire').hidden = false;
+    $('#btnHire .hire-label').textContent = av.label;
+    $('#btnHire .hire-cta').textContent = av.cta + ' →';
+  }
   $('#tape').innerHTML =
     `${esc(CONTENT.name)}<span class="hud-long"> · ${esc(CONTENT.role)}</span>`;
   $('#copyMail').addEventListener('click', () => {
@@ -37,7 +44,7 @@ function renderOverlays() {
       const s = getSelection();
       s.removeAllRanges();
       s.addRange(r);
-      toast('Seleccionado. Copialo con Ctrl+CONTENT.');
+      toast('Seleccionado. Copialo con Ctrl+C.');
     };
     try {
       navigator.clipboard.writeText(txt).then(done, fallback);

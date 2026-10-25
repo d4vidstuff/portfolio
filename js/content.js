@@ -87,6 +87,14 @@ export const CONTENT = {
     ],
     pdf: '#',
   },
+  /** Cartel "Disponible para trabajar" de la barra superior, el contacto y el CV. Con open: false se oculta. */
+  availability: {
+    open: true,
+    label: 'Disponible para trabajar',
+    cta: 'Hablemos',
+    pitch:
+      'Estoy buscando mi primer trabajo como desarrollador frontend. Si tenés un puesto o un proyecto, escribime por email o LinkedIn.',
+  },
   contact: {
     email: 'nachog.david@gmail.com',
     links: [

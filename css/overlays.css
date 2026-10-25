@@ -322,3 +322,35 @@
     padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
   }
 }
+
+/* Disponible para trabajar: frase en la ficha de contacto y sello en el CV */
+.card-pitch {
+  margin: -12px 0 22px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.card-pitch .hire-dot {
+  margin-right: 8px;
+  vertical-align: 1px;
+  background: #2f8f3a;
+  box-shadow: none;
+}
+.avail-stamp {
+  display: inline-block;
+  margin: 12px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #2f6f36;
+  border: 2px solid #2f6f36;
+  padding: 3px 10px;
+  transform: rotate(-2deg);
+  opacity: 0.85;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .avail-stamp {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+}
