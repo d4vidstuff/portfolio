@@ -46,6 +46,9 @@ const COLORS = {
   barrel: [29, 32, 36],
   rail: [61, 68, 76],
   skin: [201, 154, 122],
+  glove: [44, 45, 40],
+  knuckle: [82, 84, 74],
+  cuff: [150, 112, 86],
   sleeve: [45, 58, 42],
   brass: [255, 207, 74],
   shell: [158, 20, 28],
@@ -153,13 +156,41 @@ export function drawShotgun(ctx, W, viewH, t, walkBob) {
   for (const [c, [hu, hv, hw], color] of gunParts(pump, pump > 0.03)) {
     boxFaces(toView(c), mul(U, hu), mul(V, hv), mul(S, hw), color, faces);
   }
-  // manos y mangas
-  const gripHand = toView([-0.17, -0.1, 0.01]);
-  boxFaces(gripHand, mul(U, 0.06), mul(V, 0.045), mul(S, 0.05), 'skin', faces);
+  // manos con guantes oscuros: contrastan con la madera y los dedos se ven separados.
+  // Van en su propia capa, encima del arma, para que los dedos no queden tapados.
+  const hands = [];
+  const fingers = (u0, vTop, len, w) =>
+    [-1.5, -0.5, 0.5, 1.5].forEach((i) => {
+      const u = u0 + i * 0.036;
+      boxFaces(
+        toView([u, vTop - len / 2, w]),
+        mul(U, 0.015),
+        mul(V, len / 2),
+        mul(S, 0.009),
+        'glove',
+        hands,
+      );
+      boxFaces(
+        toView([u, vTop - 0.006, w + 0.004]),
+        mul(U, 0.015),
+        mul(V, 0.008),
+        mul(S, 0.008),
+        'knuckle',
+        hands,
+      );
+    });
+  // mano derecha en la empuñadura
+  const gripHand = toView([-0.17, -0.11, 0.005]);
+  boxFaces(gripHand, mul(U, 0.055), mul(V, 0.04), mul(S, 0.048), 'glove', hands);
+  fingers(-0.1, -0.045, 0.05, 0.045);
   limb(add(gripHand, [0.02, 0.05, -0.02]), [0.75, 0.9, 0.35], 0.07, 'sleeve', faces);
-  const foreHand = toView([0.46 - pump, -0.08, 0.01]);
-  boxFaces(foreHand, mul(U, 0.08), mul(V, 0.035), mul(S, 0.058), 'skin', faces);
-  limb(add(foreHand, [0, 0.04, -0.03]), [0.05, 1.0, 0.55], 0.065, 'sleeve', faces);
+  // mano izquierda: la palma por debajo del guardamanos y los dedos cerrados sobre el costado
+  const fu = 0.46 - pump;
+  const palm = toView([fu, -0.1, 0.005]);
+  boxFaces(palm, mul(U, 0.075), mul(V, 0.026), mul(S, 0.054), 'glove', hands);
+  fingers(fu, 0.004, 0.085, 0.06);
+  boxFaces(toView([fu, -0.13, 0]), mul(U, 0.05), mul(V, 0.012), mul(S, 0.045), 'cuff', faces); // muñeca
+  limb(add(palm, [0, 0.05, -0.03]), [0.05, 1.0, 0.55], 0.065, 'sleeve', faces);
   // cartucho que salta por la ventana
   if (t >= 0.36 && t < 0.62) {
     const k = (t - 0.36) / 0.26;
@@ -167,8 +198,10 @@ export function drawShotgun(ctx, W, viewH, t, walkBob) {
     boxFaces(p, mul(U, 0.03), mul(V, 0.012), mul(S, 0.012), 'shell', faces);
   }
 
-  // pintar de atrás hacia adelante
+  // pintar de atrás hacia adelante: primero el arma, después las manos encima
   faces.sort((a, b) => b.z - a.z);
+  hands.sort((a, b) => b.z - a.z);
+  faces.push(...hands);
   const cx = W / 2;
   const cy = viewH / 2;
   for (const f of faces) {
