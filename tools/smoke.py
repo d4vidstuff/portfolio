@@ -134,19 +134,14 @@ with sync_playwright() as p:
         step('volver con Escape', lambda: (pg.keyboard.press('Escape'), pg.wait_for_timeout(1500), pg.wait_for_selector('#ov-contact', state='hidden', timeout=3000)))
         step('cartel disponible abre contacto', lambda: (pg.click('#btnHire'), pg.wait_for_selector('#ov-contact.in', timeout=5000), pg.wait_for_timeout(400), pg.screenshot(path=shot_dir + '/hire-contacto.png'), back()))
         step('notas', lambda: (go('notes'), pg.wait_for_selector('#ov-notes.in', timeout=4000), back()))
-        def video():
+        def two_columns():
             go('floppy1'); W = '[data-win="project-02"] '
             pg.wait_for_selector(W + '.gal', timeout=12000)
-            pg.click(W + '.gal-next'); pg.wait_for_timeout(300)
-            v = "document.querySelector('[data-win=project-02] video')"
-            pg.click(W + '.vp-big'); pg.wait_for_timeout(800)
-            assert not pg.evaluate(v + '.paused'), 'no reproduce'
-            pg.click(W + '.vp-play'); assert pg.evaluate(v + '.paused'), 'no pausa'
             pg.dblclick(W + '.win-title'); pg.wait_for_timeout(300)
             cols = pg.evaluate("getComputedStyle(document.querySelector('[data-win=project-02] .proj')).gridTemplateColumns")
             assert len(cols.split()) == 2, cols
             back()
-        step('video y ventana en dos columnas', video)
+        step('ventana de proyecto en dos columnas', two_columns)
         step('disquete abre proyecto', lambda: (go('floppy1'), pg.wait_for_selector('[aria-label="PROYECTO_02.DSK"]', timeout=9000), back()))
         step('walkman activa sonido', lambda: (go('walkman'), pg.wait_for_timeout(500), pg.wait_for_selector('#btnSound[aria-pressed="true"]', timeout=2000)))
         step('Benja dormido (maullido)', lambda: (go('benja'), pg.wait_for_selector('#toast.on', timeout=2000)))

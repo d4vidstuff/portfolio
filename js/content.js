@@ -50,12 +50,6 @@ export const CONTENT = {
           src: 'img/proyectos/02/1-escritorio.jpg',
           alt: 'El escritorio en 3D con Benja durmiendo',
         },
-        {
-          type: 'video',
-          sources: ['img/proyectos/02/debug-exe.webm', 'img/proyectos/02/debug-exe.mp4'],
-          poster: 'img/proyectos/02/debug-exe.jpg',
-          alt: 'DEBUG.EXE en acción: el juego escondido en la PC',
-        },
         { src: 'img/proyectos/02/2-modo-texto.jpg', alt: 'Modo texto, para leer todo de corrido' },
         { src: 'img/proyectos/02/3-contacto.jpg', alt: 'Contacto en la ficha del módem' },
         {
