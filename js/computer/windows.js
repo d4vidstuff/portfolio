@@ -95,6 +95,7 @@ export function createWindowManager(area, taskbar) {
     const win = wins.get(id);
     if (!win) return;
     sound.sfx('click');
+    win.el.querySelectorAll('video').forEach((v) => v.pause()); // que no siga sonando escondido
     win.el.hidden = true;
     win.tab.classList.remove('on');
     win.tab.classList.add('min');

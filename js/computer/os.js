@@ -190,13 +190,18 @@ const OS = {
       if (!p) return null;
       return {
         title: `PROYECTO_${p.id}.DSK`,
-        width: 640,
-        html: `${galleryHTML(p)}
-          <h3>${esc(p.name)}</h3>
-          <p class="meta">${esc(p.year)}</p>
-          <p>${esc(p.desc)}</p>
-          <ul class="chips">${p.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
-          <p>${linkHTML(p.link, 'VER PROYECTO →', 'os-link')}</p>`,
+        width: 680,
+        // ancha (maximizada o estirada): fotos a la izquierda y texto a la derecha (ver computer.css)
+        html: `<div class="proj">
+          <div class="proj-media">${galleryHTML(p)}</div>
+          <div class="proj-info">
+            <h3>${esc(p.name)}</h3>
+            <p class="meta">${esc(p.year)}</p>
+            <p>${esc(p.desc)}</p>
+            <ul class="chips">${p.tech.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+            <p>${linkHTML(p.link, 'VER PROYECTO →', 'os-link')}</p>
+          </div>
+        </div>`,
       };
     }
   },

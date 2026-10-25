@@ -5,6 +5,8 @@
  * Fotos de proyectos: guardalas en img/proyectos/<id>/ y poné la ruta en `src`,
  * por ejemplo { src: 'img/proyectos/01/inicio.jpg', alt: 'Inicio con la aurora' }.
  * Mientras `src` esté vacío se muestra un recuadro "FOTO n".
+ * Videos: { type: 'video', sources: ['...webm', '...mp4'], poster: '...jpg', alt: '...' }
+ * (WebM y MP4 juntos para que ande en todos los navegadores; el póster es opcional).
  */
 export const CONTENT = {
   name: 'Ignacio David Gonzalez',
@@ -47,6 +49,12 @@ export const CONTENT = {
         {
           src: 'img/proyectos/02/1-escritorio.jpg',
           alt: 'El escritorio en 3D con Benja durmiendo',
+        },
+        {
+          type: 'video',
+          sources: ['img/proyectos/02/debug-exe.webm', 'img/proyectos/02/debug-exe.mp4'],
+          poster: 'img/proyectos/02/debug-exe.jpg',
+          alt: 'DEBUG.EXE en acción: el juego escondido en la PC',
         },
         { src: 'img/proyectos/02/2-modo-texto.jpg', alt: 'Modo texto, para leer todo de corrido' },
         { src: 'img/proyectos/02/3-contacto.jpg', alt: 'Contacto en la ficha del módem' },

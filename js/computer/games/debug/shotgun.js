@@ -188,56 +188,17 @@ export function drawShotgun(ctx, W, viewH, t, walkBob) {
   boxFaces(gripHand, mul(U, 0.055), mul(V, 0.04), mul(S, 0.048), 'glove', hands);
   fingers(-0.1, -0.045, 0.05, 0.045);
   limb(add(gripHand, [0.02, 0.05, -0.02]), [0.75, 0.9, 0.35], 0.07, 'sleeve', faces);
-  // mano izquierda agarrando el guardamanos desde abajo:
-  //  - la palma queda debajo (sin su cara de arriba, que está tapada por la madera)
-  //  - el pulgar va acostado a lo largo del costado que ve la cámara
-  //  - las puntas de los otros cuatro dedos asoman por el borde de arriba, desde el otro lado
+  // mano izquierda agarrando el guardamanos desde abajo: desde la cámara solo se
+  // ven la palma (debajo de la madera, sin su cara de arriba) y el pulgar acostado
+  // a lo largo del costado. Los otros dedos quedan del lado de atrás, ocultos.
   const fu = 0.46 - pump;
   const palm = toView([fu, -0.098, 0]);
-  boxFaces(palm, mul(U, 0.06), mul(V, 0.022), mul(S, 0.046), 'glove', hands, true);
-  boxFaces(
-    toView([fu - 0.035, -0.07, 0.053]),
-    mul(U, 0.03),
-    mul(V, 0.02),
-    mul(S, 0.01),
-    'glove',
-    hands,
-  ); // base del pulgar
-  boxFaces(
-    toView([fu + 0.03, -0.045, 0.056]),
-    mul(U, 0.045),
-    mul(V, 0.011),
-    mul(S, 0.009),
-    'glove',
-    hands,
-  ); // pulgar
-  boxFaces(
-    toView([fu + 0.08, -0.045, 0.057]),
-    mul(U, 0.01),
-    mul(V, 0.011),
-    mul(S, 0.009),
-    'knuckle',
-    hands,
-  ); // punta
-  [-1.5, -0.5, 0.5, 1.5].forEach((i) => {
-    const u = fu + 0.005 + i * 0.03;
-    boxFaces(
-      toView([u, 0.019, -0.03]),
-      mul(U, 0.012),
-      mul(V, 0.006),
-      mul(S, 0.018),
-      'glove',
-      hands,
-    );
-    boxFaces(
-      toView([u, 0.019, -0.008]),
-      mul(U, 0.012),
-      mul(V, 0.006),
-      mul(S, 0.005),
-      'knuckle',
-      hands,
-    );
-  });
+  const handBox = (c, hu, hv, hw, color, skipTop) =>
+    boxFaces(toView(c), mul(U, hu), mul(V, hv), mul(S, hw), color, hands, skipTop);
+  handBox([fu, -0.098, 0], 0.07, 0.024, 0.05, 'glove', true); // palma
+  handBox([fu - 0.03, -0.072, 0.054], 0.035, 0.022, 0.01, 'glove', true); // base del pulgar
+  handBox([fu + 0.035, -0.05, 0.057], 0.05, 0.012, 0.009, 'glove'); // pulgar
+  handBox([fu + 0.09, -0.05, 0.058], 0.01, 0.012, 0.009, 'knuckle'); // punta del pulgar
   boxFaces(
     toView([fu - 0.01, -0.125, 0]),
     mul(U, 0.045),

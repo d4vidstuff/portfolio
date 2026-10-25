@@ -213,6 +213,7 @@
   outline-offset: 1px;
 }
 .win-body {
+  container-type: inline-size; /* para que el contenido se acomode al ancho de la ventana */
   flex: 1;
   overflow: auto;
   padding: 14px 16px;
@@ -336,10 +337,7 @@
   border: 1px solid var(--phos-dim);
   background: #020502;
 }
-.win.is-max .gal-stage {
-  aspect-ratio: auto;
-  height: 50vh;
-}
+
 .gal-slide {
   position: absolute;
   inset: 0;
@@ -687,4 +685,167 @@
   .game-help {
     display: none;
   }
+}
+
+/* Ventana de proyecto ancha (maximizada o estirada): fotos/videos a la izquierda,
+   como mucho la mitad del ancho, y la descripción a la derecha */
+@container (min-width: 820px) {
+  .proj {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  .proj-media {
+    position: sticky;
+    top: 0;
+  }
+  .proj-info h3 {
+    margin-top: 0;
+  }
+}
+
+/* Miniaturas de video: el póster con una marca ▶ */
+.media-video {
+  position: relative;
+  display: grid;
+}
+.media-video > * {
+  grid-area: 1 / 1;
+}
+.media-play {
+  place-self: center;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--phos);
+  background: rgba(5, 12, 6, 0.8);
+  border: 1px solid var(--phos);
+  padding: 3px 6px 3px 8px;
+  text-shadow: none;
+}
+.gal-thumb .media-play {
+  font-size: 11px;
+  padding: 1px 3px 1px 4px;
+}
+
+/* Reproductor de video */
+.vp {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  outline: none;
+}
+.vp:focus-visible {
+  outline: 1px dashed var(--phos);
+  outline-offset: 2px;
+}
+.vp-video {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  object-fit: contain;
+  background: #000;
+  cursor: pointer;
+}
+.vp-osd {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  color: var(--phos);
+  text-shadow: 0 0 6px rgba(149, 214, 138, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.vp-osd.on {
+  opacity: 1;
+}
+.vp-big {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 16px);
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 52px;
+  font-size: 26px;
+  color: var(--phos);
+  background: rgba(5, 12, 6, 0.82);
+  border: 2px solid var(--phos);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+.vp-big:hover {
+  background: var(--phos);
+  color: var(--phos-bg);
+  text-shadow: none;
+}
+.vp.playing .vp-big {
+  display: none;
+}
+.vp-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  background: var(--phos-bg);
+  border-top: 1px solid var(--phos-dim);
+  font-size: 16px;
+}
+.vp-btn {
+  min-width: 34px;
+  height: 24px;
+  padding: 0 6px;
+  font-size: 15px;
+  color: var(--phos);
+  border: 1px solid var(--phos-dim);
+  text-shadow: inherit;
+}
+.vp-btn:hover,
+.vp-btn[aria-pressed='true'] {
+  background: var(--phos);
+  color: var(--phos-bg);
+  text-shadow: none;
+}
+.vp-time,
+.vp-dur {
+  font-variant-numeric: tabular-nums;
+  color: var(--phos-dim);
+}
+/* barra de progreso por bloques, como la de la pantalla de carga */
+.vp-track {
+  position: relative;
+  flex: 1;
+  height: 14px;
+  border: 1px solid var(--phos-dim);
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+}
+.vp-track:focus-visible {
+  border-color: var(--phos);
+}
+.vp-fill {
+  --p: 0;
+  position: absolute;
+  inset: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--phos) 0 calc(2.5% - 2px),
+    transparent calc(2.5% - 2px) 2.5%
+  );
+  clip-path: inset(0 calc((1 - var(--p)) * 100%) 0 0);
+}
+.vp:fullscreen {
+  border: 0;
+}
+/* con un video en pantalla, el contador sube para no tapar los controles */
+.gal.video-on .gal-count {
+  top: 6px;
+  bottom: auto;
+}
+.gal.video-on .gal-nav {
+  top: calc(50% - 16px);
 }

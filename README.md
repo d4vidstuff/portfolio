@@ -50,12 +50,14 @@ js/
   cat/                Benja despierto: poses, comportamiento, caricias y globo.
   computer/           PORTFOLIO-DOS: contenido (os.js), ventanas que se mueven,
                       agrandan y minimizan (windows.js), galería de fotos
-                      (gallery.js), comandos (terminal.js) y el juego
+                      (gallery.js), reproductor de video (video-player.js),
+                      comandos (terminal.js) y el juego
                       DEBUG.EXE (games/debug/: un raycaster en canvas 2D con
                       4 niveles en levels.js, enemigos en enemies.js y
                       gráficos en art.js).
 tools/smoke.py        Prueba automática en Chromium (ver abajo).
 tools/game_test.py    Prueba completa de DEBUG.EXE (niveles, disparo, IA).
+tools/record_game_video.py  Graba el video de DEBUG.EXE de la galería (bot + ffmpeg).
 ```
 
 ## Tareas comunes
@@ -64,6 +66,7 @@ tools/game_test.py    Prueba completa de DEBUG.EXE (niveles, disparo, IA).
 | --- | --- |
 | Cambiar textos, proyectos o el CV | `js/content.js` |
 | Agregar fotos a un proyecto | Copiarlas a `img/proyectos/<id>/` y poner la ruta en `photos` de `js/content.js` |
+| Agregar un video a un proyecto | WebM + MP4 en `img/proyectos/<id>/` y un elemento `{ type: 'video', sources: [...], poster }` en `photos` |
 | Agregar un comando a la terminal | `js/computer/terminal.js` |
 | Cambiar qué hace un objeto al tocarlo | `js/desk/actions.js` |
 | Mover o agregar un objeto 3D | `js/scene/objects/` y registrarlo en `js/desk/start.js` |
@@ -73,13 +76,14 @@ tools/game_test.py    Prueba completa de DEBUG.EXE (niveles, disparo, IA).
 
 ## Correr en local
 
-Los módulos y los sonidos necesitan un servidor (no funcionan abriendo el archivo con doble click):
+Los módulos, los sonidos y los videos necesitan un servidor (no funcionan abriendo el archivo con doble click):
 
 ```
-python3 -m http.server
+npx http-server -c-1
 ```
 
-y abrí http://localhost:8000.
+y abrí http://localhost:8080. También sirve `python3 -m http.server`, pero no permite adelantar los videos
+(no soporta pedidos por rangos; Netlify y GitHub Pages sí).
 
 ## Calidad de código
 
